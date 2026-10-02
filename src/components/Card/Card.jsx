@@ -1,5 +1,6 @@
 import Badge from '../Badge/Badge.jsx'
 import Button from '../Button/Button.jsx'
+import FavoriteButton from '../FavoriteButton/FavoriteButton.jsx'
 import RatingStars from '../RatingStars/RatingStars.jsx'
 import './Card.css'
 
@@ -21,11 +22,13 @@ import './Card.css'
  * @property {number} reviewsCount — количество отзывов
  * @property {MovieStatus} status — статус для бейджа
  * @property {boolean} isAvailable — можно ли смотреть фильм уже сейчас
- * @property {() => void} onWatch — открыть просмотр фильма
+ * @property {boolean} isFavorite — находится ли фильм в избранном
+ * @property {() => void} onOpen — открыть быстрый просмотр
+ * @property {(isFavorite: boolean) => void} onToggleFavorite — добавить / убрать из избранного
  */
 
 /**
- * Карточка фильма в каталоге.
+ * Карточка фильма в каталоге. Клик по любому месту карточки открывает быстрый просмотр.
  * @param {CardProps} props
  */
 function Card({
@@ -39,14 +42,33 @@ function Card({
   reviewsCount,
   status,
   isAvailable,
-  onWatch,
+  isFavorite,
+  onOpen,
+  onToggleFavorite,
 }) {
+  const handleKeyDown = (event) => {
+    if (event.target !== event.currentTarget) return
+    if (event.key === 'Enter' || event.key === ' ') {
+      event.preventDefault()
+      onOpen()
+    }
+  }
+
   return (
-    <article className="card">
+    <article
+      className="card"
+      tabIndex={0}
+      aria-label={`${title}, открыть подробности`}
+      onClick={onOpen}
+      onKeyDown={handleKeyDown}
+    >
       <div className="card__poster">
         <img src={imageUrl} alt={`Постер фильма «${title}»`} loading="lazy" />
         <div className="card__badge">
           <Badge label={status.label} colorScheme={status.colorScheme} />
+        </div>
+        <div className="card__favorite">
+          <FavoriteButton initialIsFavorite={isFavorite} onToggle={onToggleFavorite} />
         </div>
       </div>
 
@@ -59,10 +81,11 @@ function Card({
         <p className="card__description">{description}</p>
 
         <div className="card__actions">
+          {/* клик по кнопке всплывает до карточки и открывает быстрый просмотр */}
           {isAvailable ? (
-            <Button text="Смотреть" variant="primary" onClick={onWatch} />
+            <Button text="Смотреть" variant="primary" />
           ) : (
-            <Button text="Скоро на CineVibe" variant="outline" isDisabled />
+            <Button text="Билеты на премьеру" variant="outline" />
           )}
         </div>
       </div>

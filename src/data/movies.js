@@ -131,6 +131,18 @@ export const movies = [
     reviewsCount: 3120,
     status: { label: 'Скоро', colorScheme: 'yellow' },
     isAvailable: false,
+    // фильм ещё идёт в кинотеатрах — на премьерный показ можно купить билеты
+    ticketPrice: 3500,
     imageUrl: createPoster('П', ['#0369a1', '#1e1b4b']),
   },
+]
+
+export const MOVIES_PER_PAGE = 4
+
+export const sortOptions = [
+  { value: 'rating-desc', label: 'Сначала с высоким рейтингом' },
+  { value: 'rating-asc', label: 'Сначала с низким рейтингом' },
+  { value: 'year-desc', label: 'Сначала новые' },
+  { value: 'year-asc', label: 'Сначала старые' },
+  { value: 'title-asc', label: 'По названию (А–Я)' },
 ]

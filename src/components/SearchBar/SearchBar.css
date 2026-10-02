@@ -1,0 +1,67 @@
+.search-bar {
+  position: relative;
+  display: flex;
+  align-items: center;
+  flex: 1;
+  min-width: min(100%, 240px);
+}
+
+.search-bar__icon {
+  position: absolute;
+  left: 16px;
+  fill: none;
+  stroke: var(--color-muted);
+  stroke-width: 2;
+  stroke-linecap: round;
+  pointer-events: none;
+}
+
+.search-bar__input {
+  width: 100%;
+  height: 44px;
+  padding: 0 44px;
+  border: 1px solid var(--color-border);
+  border-radius: 999px;
+  font: inherit;
+  font-size: 0.9375rem;
+  color: var(--color-text);
+  background: var(--color-surface);
+  transition: border-color 0.2s ease;
+}
+
+.search-bar__input::placeholder {
+  color: var(--color-muted);
+}
+
+.search-bar__input:focus {
+  border-color: var(--color-accent);
+  outline: none;
+}
+
+/* убираем встроенный крестик браузера — у нас свой */
+.search-bar__input::-webkit-search-cancel-button {
+  appearance: none;
+}
+
+.search-bar__clear {
+  position: absolute;
+  right: 8px;
+  display: grid;
+  place-items: center;
+  width: 30px;
+  height: 30px;
+  border: none;
+  border-radius: 50%;
+  font-size: 1.25rem;
+  line-height: 1;
+  color: var(--color-muted);
+  background: transparent;
+  cursor: pointer;
+}
+
+.search-bar__clear:hover,
+.search-bar__clear:focus-visible {
+  color: var(--color-text);
+  background: var(--color-surface-raised);
+  outline: none;
+}

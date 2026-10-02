@@ -22,8 +22,25 @@
 .header__actions {
   display: flex;
   align-items: center;
-  gap: 16px;
+  gap: 12px;
   margin-left: auto;
+}
+
+.header__favorites {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  height: 42px;
+  padding: 0 14px;
+  border: 1px solid var(--color-border);
+  border-radius: 999px;
+  font-size: 0.9375rem;
+  font-weight: 700;
+  color: var(--color-text);
+}
+
+.header__favorites svg {
+  fill: var(--color-accent);
 }
 
 /* Бургер-меню появится в ДЗ №4, пока на узких экранах меню уходит второй строкой */

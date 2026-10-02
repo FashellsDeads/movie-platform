@@ -1,0 +1,48 @@
+.sort-dropdown {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.sort-dropdown__label {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--color-muted);
+  white-space: nowrap;
+}
+
+.sort-dropdown__select {
+  height: 44px;
+  padding: 0 40px 0 16px;
+  border: 1px solid var(--color-border);
+  border-radius: 999px;
+  font: inherit;
+  font-size: 0.9375rem;
+  color: var(--color-text);
+  background:
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8'%3E%3Cpath d='M1 1l5 5 5-5' fill='none' stroke='%239b9bae' stroke-width='2'/%3E%3C/svg%3E")
+      no-repeat right 16px center,
+    var(--color-surface);
+  appearance: none;
+  cursor: pointer;
+}
+
+.sort-dropdown__select:focus {
+  border-color: var(--color-accent);
+  outline: none;
+}
+
+.sort-dropdown__select option {
+  color: var(--color-text);
+  background: var(--color-surface);
+}
+
+@media (max-width: 600px) {
+  .sort-dropdown {
+    width: 100%;
+  }
+
+  .sort-dropdown__select {
+    flex: 1;
+  }
+}

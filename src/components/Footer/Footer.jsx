@@ -13,19 +13,20 @@ import './Footer.css'
  * @typedef {Object} FooterProps
  * @property {string} copyrightText — год и авторские права
  * @property {SocialLink[]} socialLinks — ссылки на соцсети
+ * @property {string} logoSrc — логотип под текущую тему
  */
 
 /**
  * Подвал сайта.
  * @param {FooterProps} props
  */
-function Footer({ copyrightText, socialLinks }) {
+function Footer({ copyrightText, socialLinks, logoSrc }) {
   return (
     <footer className="footer">
       <Container maxWidth={1320}>
         <div className="footer__top">
           <div className="footer__brand">
-            <Logo src="/logo.svg" altText="CineVibe" width={126} height={30} />
+            <Logo src={logoSrc}altText="CineVibe" width={126} height={30} />
             <p className="footer__tagline">Фильмы, которые хочется обсуждать.</p>
           </div>
 

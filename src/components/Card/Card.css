@@ -5,10 +5,16 @@
   border: 1px solid var(--color-border);
   border-radius: var(--radius-lg);
   background: var(--color-surface);
+  cursor: pointer;
   transition:
     transform 0.25s ease,
     border-color 0.25s ease,
     box-shadow 0.25s ease;
+}
+
+.card:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 3px;
 }
 
 .card:hover {
@@ -39,6 +45,12 @@
   position: absolute;
   top: 12px;
   left: 12px;
+}
+
+.card__favorite {
+  position: absolute;
+  top: 10px;
+  right: 10px;
 }
 
 .card__body {

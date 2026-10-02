@@ -33,13 +33,28 @@ npm run lint     # проверка кода (oxlint)
 | 14 | `Container` | `children`, `maxWidth` | Оборачивает все секции (1200 / 1080 / 1320 px) |
 | 15 | `Footer` | `copyrightText`, `socialLinks[]` (`platform`, `url`, `icon`) | Подвал сайта |
 
+## ДЗ №3 — управление состоянием с помощью useState
+
+| # | Сценарий | Состояние | Где |
+|---|---|---|---|
+| 1 | Тёмная / светлая тема | `const [isDarkMode, setIsDarkMode] = useState(true)` | `App.jsx`, кнопка `ThemeToggle` в Header переключает класс `theme-dark` / `theme-light` на обёртке приложения |
+| 2 | Быстрый просмотр фильма | `const [isModalOpen, setIsModalOpen] = useState(false)` + `selectedMovie` | `App.jsx` → `QuickViewModal`; открывается кликом по карточке, закрывается крестиком, кнопкой «Закрыть» или кликом по оверлею |
+| 3 | Поиск по названию | `const [searchQuery, setSearchQuery] = useState('')` | `App.jsx` → контролируемый input в `SearchBar`, фильтрация на лету |
+| 4 | Фильтр по жанру | `const [selectedCategory, setSelectedCategory] = useState('Все')` | `App.jsx` → `CategoryFilter`, активный жанр подсвечен |
+| 5 | Пагинация каталога | `const [currentPage, setCurrentPage] = useState(1)` | `App.jsx` → `Pagination` (4 фильма на странице, «Назад» / «Вперёд» блокируются на границах) |
+| 6 | Количество билетов на премьеру | `const [quantity, setQuantity] = useState(1)` | `QuantitySelector` внутри окна фильма, не меньше 1 и не больше 10, считает итоговую сумму |
+| 7 | Избранное | `const [isFavorite, setIsFavorite] = useState(false)` | `FavoriteButton` на постере; меняет вид сердечка и через `onToggle` обновляет счётчик в шапке (`favoriteIds` в `App.jsx`) |
+| 8 | Сортировка каталога | `const [sortBy, setSortBy] = useState('rating-desc')` | `App.jsx` → `<select>` в `SortDropdown`: по рейтингу, году, названию |
+
+При смене поиска, жанра или сортировки каталог возвращается на первую страницу.
+
 ## Структура
 
 ```
 src/
-├── components/     # 16 компонентов: 15 из задания + Header, каждый в своей папке со своими стилями
+├── components/     # компоненты, каждый в своей папке со своими стилями
 ├── data/           # моковые данные: фильмы, навигация, статистика, отзывы
-├── utils/          # форматирование чисел и дат, генерация постеров и аватаров
+├── utils/          # форматирование, поиск и сортировка фильмов, генерация постеров и аватаров
 ├── App.jsx         # сборка страницы
 └── index.css       # дизайн-токены (CSS-переменные) и базовые стили
 ```

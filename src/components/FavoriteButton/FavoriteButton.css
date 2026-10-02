@@ -1,0 +1,41 @@
+.favorite-button {
+  display: grid;
+  place-items: center;
+  width: 40px;
+  height: 40px;
+  border: none;
+  border-radius: 50%;
+  color: #fff;
+  background: rgba(10, 10, 15, 0.55);
+  backdrop-filter: blur(8px);
+  cursor: pointer;
+  transition:
+    transform 0.15s ease,
+    background-color 0.2s ease;
+}
+
+.favorite-button svg {
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2;
+  stroke-linejoin: round;
+  transition: fill 0.2s ease;
+}
+
+.favorite-button:hover {
+  transform: scale(1.1);
+}
+
+.favorite-button:focus-visible {
+  outline: 2px solid #fff;
+  outline-offset: 2px;
+}
+
+.favorite-button--active {
+  color: #ff3d68;
+  background: rgba(255, 255, 255, 0.92);
+}
+
+.favorite-button--active svg {
+  fill: currentColor;
+}

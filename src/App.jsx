@@ -1,5 +1,4 @@
 import { useState } from 'react'
-import Badge from './components/Badge/Badge.jsx'
 import Button from './components/Button/Button.jsx'
 import Card from './components/Card/Card.jsx'
 import CategoryFilter from './components/CategoryFilter/CategoryFilter.jsx'
@@ -8,11 +7,14 @@ import Footer from './components/Footer/Footer.jsx'
 import Header from './components/Header/Header.jsx'
 import HeroSection from './components/HeroSection/HeroSection.jsx'
 import Modal from './components/Modal/Modal.jsx'
-import RatingStars from './components/RatingStars/RatingStars.jsx'
+import Pagination from './components/Pagination/Pagination.jsx'
+import QuickViewModal from './components/QuickViewModal/QuickViewModal.jsx'
+import SearchBar from './components/SearchBar/SearchBar.jsx'
 import SectionHeader from './components/SectionHeader/SectionHeader.jsx'
+import SortDropdown from './components/SortDropdown/SortDropdown.jsx'
 import StatCard from './components/StatCard/StatCard.jsx'
 import TestimonialCard from './components/TestimonialCard/TestimonialCard.jsx'
-import { ALL_CATEGORY, categories, movies } from './data/movies.js'
+import { ALL_CATEGORY, MOVIES_PER_PAGE, categories, movies, sortOptions } from './data/movies.js'
 import {
   SITE_NAME,
   currentUser,
@@ -23,34 +25,89 @@ import {
   stats,
 } from './data/site.js'
 import { testimonials } from './data/testimonials.js'
+import { searchMovies, sortMovies } from './utils/movies.js'
 import './App.css'
 
 const featuredMovie = movies[0]
 const copyrightText = `© ${new Date().getFullYear()} ${SITE_NAME}. Все права защищены.`
 
 function App() {
-  const [activeCategory, setActiveCategory] = useState(ALL_CATEGORY)
+  // ДЗ №3 — состояния приложения
+  const [isDarkMode, setIsDarkMode] = useState(true)
+  const [isModalOpen, setIsModalOpen] = useState(false)
   const [selectedMovie, setSelectedMovie] = useState(null)
+  const [searchQuery, setSearchQuery] = useState('')
+  const [selectedCategory, setSelectedCategory] = useState(ALL_CATEGORY)
+  const [currentPage, setCurrentPage] = useState(1)
+  const [sortBy, setSortBy] = useState('rating-desc')
+  const [favoriteIds, setFavoriteIds] = useState([])
   const [isPremiumOpen, setIsPremiumOpen] = useState(false)
 
-  const visibleMovies =
-    activeCategory === ALL_CATEGORY
+  // Каталог: жанр → поиск → сортировка → текущая страница
+  const moviesInCategory =
+    selectedCategory === ALL_CATEGORY
       ? movies
-      : movies.filter((movie) => movie.genre === activeCategory)
+      : movies.filter((movie) => movie.genre === selectedCategory)
+  const foundMovies = sortMovies(searchMovies(moviesInCategory, searchQuery), sortBy)
+  const totalPages = Math.ceil(foundMovies.length / MOVIES_PER_PAGE)
+  const pageStart = (currentPage - 1) * MOVIES_PER_PAGE
+  const visibleMovies = foundMovies.slice(pageStart, pageStart + MOVIES_PER_PAGE)
 
-  const closeMovie = () => setSelectedMovie(null)
+  const logoSrc = isDarkMode ? '/logo.svg' : '/logo-light.svg'
+
+  // При смене условий каталога возвращаемся на первую страницу
+  const handleSearchChange = (query) => {
+    setSearchQuery(query)
+    setCurrentPage(1)
+  }
+
+  const handleCategorySelect = (category) => {
+    setSelectedCategory(category)
+    setCurrentPage(1)
+  }
+
+  const handleSortChange = (value) => {
+    setSortBy(value)
+    setCurrentPage(1)
+  }
+
+  const resetCatalog = () => {
+    setSearchQuery('')
+    setSelectedCategory(ALL_CATEGORY)
+    setCurrentPage(1)
+  }
+
+  const openMovie = (movie) => {
+    setSelectedMovie(movie)
+    setIsModalOpen(true)
+  }
+
+  const closeMovie = () => setIsModalOpen(false)
+
+  const toggleFavorite = (movieId, isFavorite) => {
+    setFavoriteIds((prev) => (isFavorite ? [...prev, movieId] : prev.filter((id) => id !== movieId)))
+  }
+
   const closePremium = () => setIsPremiumOpen(false)
 
   return (
-    <div className="app">
-      <Header navItems={navItems} user={currentUser} onPremiumClick={() => setIsPremiumOpen(true)} />
+    <div className={`app ${isDarkMode ? 'theme-dark' : 'theme-light'}`}>
+      <Header
+        navItems={navItems}
+        user={currentUser}
+        logoSrc={logoSrc}
+        isDarkMode={isDarkMode}
+        onToggleTheme={() => setIsDarkMode((prev) => !prev)}
+        favoritesCount={favoriteIds.length}
+        onPremiumClick={() => setIsPremiumOpen(true)}
+      />
 
       <main>
         <HeroSection
           heading={hero.heading}
           subheading={hero.subheading}
           buttonText={hero.buttonText}
-          onButtonClick={() => setSelectedMovie(featuredMovie)}
+          onButtonClick={() => openMovie(featuredMovie)}
         />
 
         <section id="stats" className="section">
@@ -81,29 +138,50 @@ function App() {
               subtitle="Выберите жанр — и мы покажем лучшее из нашей коллекции."
               align="left"
             />
+
+            <div className="catalog-toolbar">
+              <SearchBar value={searchQuery} onChange={handleSearchChange} />
+              <SortDropdown options={sortOptions} value={sortBy} onChange={handleSortChange} />
+            </div>
+
             <CategoryFilter
               categories={categories}
-              activeCategory={activeCategory}
-              onSelect={setActiveCategory}
+              activeCategory={selectedCategory}
+              onSelect={handleCategorySelect}
             />
-            <div className="movies-grid">
-              {visibleMovies.map((movie) => (
-                <Card
-                  key={movie.id}
-                  title={movie.title}
-                  description={movie.description}
-                  imageUrl={movie.imageUrl}
-                  year={movie.year}
-                  genre={movie.genre}
-                  duration={movie.duration}
-                  score={movie.score}
-                  reviewsCount={movie.reviewsCount}
-                  status={movie.status}
-                  isAvailable={movie.isAvailable}
-                  onWatch={() => setSelectedMovie(movie)}
-                />
-              ))}
-            </div>
+
+            {visibleMovies.length > 0 ? (
+              <div className="movies-grid">
+                {visibleMovies.map((movie) => (
+                  <Card
+                    key={movie.id}
+                    title={movie.title}
+                    description={movie.description}
+                    imageUrl={movie.imageUrl}
+                    year={movie.year}
+                    genre={movie.genre}
+                    duration={movie.duration}
+                    score={movie.score}
+                    reviewsCount={movie.reviewsCount}
+                    status={movie.status}
+                    isAvailable={movie.isAvailable}
+                    isFavorite={favoriteIds.includes(movie.id)}
+                    onOpen={() => openMovie(movie)}
+                    onToggleFavorite={(isFavorite) => toggleFavorite(movie.id, isFavorite)}
+                  />
+                ))}
+              </div>
+            ) : (
+              <div className="catalog-empty">
+                <p className="catalog-empty__title">Ничего не нашлось</p>
+                <p className="catalog-empty__text">
+                  По запросу «{searchQuery}» в жанре «{selectedCategory}» фильмов нет.
+                </p>
+                <Button text="Сбросить фильтры" variant="secondary" onClick={resetCatalog} />
+              </div>
+            )}
+
+            <Pagination currentPage={currentPage} totalPages={totalPages} onPageChange={setCurrentPage} />
           </Container>
         </section>
 
@@ -130,26 +208,9 @@ function App() {
         </section>
       </main>
 
-      <Footer copyrightText={copyrightText} socialLinks={socialLinks} />
+      <Footer copyrightText={copyrightText} socialLinks={socialLinks} logoSrc={logoSrc} />
 
-      <Modal isOpen={selectedMovie !== null} title={selectedMovie?.title ?? ''} onClose={closeMovie}>
-        {selectedMovie && (
-          <div className="movie-preview">
-            <div className="movie-preview__player" style={{ backgroundImage: `url("${selectedMovie.imageUrl}")` }}>
-              <span className="movie-preview__play" aria-hidden="true">▶</span>
-            </div>
-            <div className="movie-preview__meta">
-              <Badge label={selectedMovie.status.label} colorScheme={selectedMovie.status.colorScheme} />
-              <span>
-                {selectedMovie.year} · {selectedMovie.genre} · {selectedMovie.duration}
-              </span>
-            </div>
-            <RatingStars score={selectedMovie.score} reviewsCount={selectedMovie.reviewsCount} />
-            <p className="movie-preview__description">{selectedMovie.description}</p>
-            <Button text="Начать просмотр" variant="primary" onClick={closeMovie} />
-          </div>
-        )}
-      </Modal>
+      <QuickViewModal isOpen={isModalOpen} movie={selectedMovie} onClose={closeMovie} />
 
       <Modal isOpen={isPremiumOpen} title={`${SITE_NAME} Premium`} onClose={closePremium}>
         <div className="premium">
