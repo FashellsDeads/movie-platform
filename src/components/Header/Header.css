@@ -1,0 +1,42 @@
+.header {
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  border-bottom: 1px solid var(--color-border);
+  background: var(--color-header-bg);
+  backdrop-filter: blur(16px);
+}
+
+.header__inner {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  min-height: 72px;
+}
+
+.header .navigation {
+  flex: 1;
+  min-width: 0;
+}
+
+.header__actions {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-left: auto;
+}
+
+/* Бургер-меню появится в ДЗ №4, пока на узких экранах меню уходит второй строкой */
+@media (max-width: 900px) {
+  .header__inner {
+    flex-wrap: wrap;
+    gap: 8px 16px;
+    padding-block: 12px;
+  }
+
+  .header .navigation {
+    order: 3;
+    flex-basis: 100%;
+    overflow-x: auto;
+  }
+}

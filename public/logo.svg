@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="168" height="40" viewBox="0 0 168 40">
+  <defs>
+    <linearGradient id="accent" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#ff3d68"/>
+      <stop offset="1" stop-color="#ff8a3d"/>
+    </linearGradient>
+  </defs>
+  <rect x="0" y="0" width="40" height="40" rx="11" fill="url(#accent)"/>
+  <path d="M16 12.5v15l12-7.5z" fill="#ffffff"/>
+  <text x="50" y="27.5" font-family="Arial, Helvetica, sans-serif" font-size="21" font-weight="700" fill="#f5f5f7">Cine<tspan fill="#ff5a5f">Vibe</tspan></text>
+</svg>

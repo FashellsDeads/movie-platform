@@ -1,0 +1,120 @@
+.app {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+.app main {
+  flex: 1;
+}
+
+.section {
+  padding-block: clamp(48px, 7vw, 80px);
+  scroll-margin-top: 72px;
+}
+
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(220px, 100%), 1fr));
+  gap: 16px;
+}
+
+.movies-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(min(230px, 100%), 1fr));
+  gap: 24px;
+}
+
+.testimonials-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(280px, 100%), 1fr));
+  gap: 20px;
+}
+
+/* Содержимое модального окна фильма */
+.movie-preview {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 14px;
+}
+
+.movie-preview__player {
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  overflow: hidden;
+  border-radius: var(--radius-md);
+  background-position: center 30%;
+  background-size: cover;
+}
+
+.movie-preview__play {
+  display: grid;
+  place-items: center;
+  width: 68px;
+  height: 68px;
+  padding-left: 5px;
+  border-radius: 50%;
+  font-size: 1.5rem;
+  color: #fff;
+  background: var(--gradient-accent);
+  box-shadow: 0 10px 30px var(--color-accent-glow);
+}
+
+.movie-preview__meta {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 0.875rem;
+  color: var(--color-muted);
+}
+
+.movie-preview__description {
+  margin: 0 0 6px;
+  color: var(--color-text);
+}
+
+/* Содержимое модального окна подписки */
+.premium__price {
+  margin: 0 0 16px;
+  font-size: 2rem;
+  font-weight: 800;
+  color: var(--color-text);
+}
+
+.premium__price span {
+  font-size: 1rem;
+  font-weight: 500;
+  color: var(--color-muted);
+}
+
+.premium__list {
+  display: grid;
+  gap: 10px;
+  margin: 0 0 24px;
+  padding: 0;
+  list-style: none;
+}
+
+.premium__list li {
+  position: relative;
+  padding-left: 28px;
+  color: var(--color-text);
+}
+
+.premium__list li::before {
+  content: '✓';
+  position: absolute;
+  left: 0;
+  font-weight: 800;
+  color: var(--color-success);
+}
+
+.premium__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}

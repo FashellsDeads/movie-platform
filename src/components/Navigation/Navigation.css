@@ -1,0 +1,27 @@
+.navigation__list {
+  display: flex;
+  gap: 4px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.navigation__link {
+  display: block;
+  padding: 8px 14px;
+  border-radius: 999px;
+  font-size: 0.9375rem;
+  font-weight: 600;
+  color: var(--color-muted);
+  white-space: nowrap;
+  transition:
+    color 0.2s ease,
+    background-color 0.2s ease;
+}
+
+.navigation__link:hover,
+.navigation__link:focus-visible {
+  color: var(--color-text);
+  background: var(--color-surface-raised);
+  outline: none;
+}

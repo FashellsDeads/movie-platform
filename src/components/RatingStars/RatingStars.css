@@ -1,0 +1,36 @@
+.rating {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 6px;
+  font-size: 0.8125rem;
+}
+
+.rating__stars {
+  position: relative;
+  display: inline-block;
+  font-size: 1rem;
+  line-height: 1;
+  letter-spacing: 1px;
+}
+
+.rating__stars-base {
+  color: var(--color-star-empty);
+}
+
+.rating__stars-fill {
+  position: absolute;
+  inset: 0 auto 0 0;
+  overflow: hidden;
+  white-space: nowrap;
+  color: var(--color-star);
+}
+
+.rating__score {
+  font-weight: 800;
+  color: var(--color-text);
+}
+
+.rating__count {
+  color: var(--color-muted);
+}
