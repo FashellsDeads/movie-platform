@@ -1,4 +1,4 @@
-import { useId } from 'react'
+import { useEffect, useId } from 'react'
 import './Modal.css'
 
 /**
@@ -15,6 +15,18 @@ import './Modal.css'
  */
 function Modal({ isOpen, title, onClose, children }) {
   const titleId = useId()
+
+  // ДЗ №4 · #11 — закрытие по Escape, подписка живёт только пока окно открыто
+  useEffect(() => {
+    if (!isOpen) return
+
+    const handleKeyDown = (event) => {
+      if (event.key === 'Escape') onClose()
+    }
+
+    document.addEventListener('keydown', handleKeyDown)
+    return () => document.removeEventListener('keydown', handleKeyDown)
+  }, [isOpen, onClose])
 
   if (!isOpen) return null
 

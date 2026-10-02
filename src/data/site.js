@@ -23,6 +23,13 @@ export const hero = {
   buttonText: 'Смотреть «Дюну» сейчас',
 }
 
+export const promo = {
+  title: 'Premium за полцены',
+  text: 'Первый месяц подписки — 1 245 ₸ вместо 2 490 ₸. Успейте, пока идёт таймер.',
+  buttonText: 'Забрать скидку',
+  durationSeconds: 10 * 60,
+}
+
 export const stats = [
   { id: 'titles', title: 'Фильмов в каталоге', value: 12480, change: 8.2, isPositive: true },
   { id: 'online', title: 'Зрителей онлайн', value: 3215, change: 12.5, isPositive: true },

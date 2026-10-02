@@ -1,8 +1,31 @@
 .user-profile {
+  position: relative;
+  min-width: 0;
+}
+
+.user-profile__trigger {
   display: flex;
   align-items: center;
   gap: 10px;
   min-width: 0;
+  padding: 4px 8px 4px 4px;
+  border: none;
+  border-radius: 999px;
+  font: inherit;
+  text-align: left;
+  color: inherit;
+  background: transparent;
+  cursor: pointer;
+}
+
+.user-profile__trigger:hover,
+.user-profile__trigger[aria-expanded='true'] {
+  background: var(--color-surface-raised);
+}
+
+.user-profile__trigger:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 2px;
 }
 
 .user-profile__avatar {
@@ -22,30 +45,102 @@
   font-size: 0.875rem;
   font-weight: 700;
   color: var(--color-text);
+  white-space: nowrap;
 }
 
 .user-profile__role {
   font-size: 0.75rem;
   font-weight: 600;
   color: var(--color-accent);
-}
-
-.user-profile__email {
-  overflow: hidden;
-  font-size: 0.75rem;
-  color: var(--color-muted);
-  text-overflow: ellipsis;
   white-space: nowrap;
 }
 
-@media (max-width: 1100px) {
-  .user-profile__email {
-    display: none;
+.user-profile__chevron {
+  font-size: 0.75rem;
+  color: var(--color-muted);
+}
+
+.user-profile__menu {
+  position: absolute;
+  top: calc(100% + 10px);
+  right: 0;
+  z-index: 70;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 260px;
+  padding: 20px;
+  border: 1px solid var(--color-border-strong);
+  border-radius: var(--radius-lg);
+  text-align: center;
+  background: var(--color-surface);
+  box-shadow: var(--shadow-lg);
+  animation: profile-menu-in 0.15s ease;
+}
+
+.user-profile__menu-avatar {
+  margin-bottom: 10px;
+  border-radius: 50%;
+}
+
+.user-profile__menu-name {
+  margin: 0;
+  font-weight: 800;
+  color: var(--color-text);
+}
+
+.user-profile__menu-email {
+  margin: 2px 0 10px;
+  font-size: 0.8125rem;
+  color: var(--color-muted);
+  word-break: break-all;
+}
+
+.user-profile__menu-role {
+  margin-bottom: 16px;
+  padding: 4px 12px;
+  border-radius: 999px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: var(--color-accent);
+  background: var(--color-surface-raised);
+}
+
+.user-profile__menu-action {
+  width: 100%;
+  padding: 10px 14px;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  font: inherit;
+  font-size: 0.875rem;
+  font-weight: 700;
+  color: var(--color-text);
+  background: transparent;
+  cursor: pointer;
+}
+
+.user-profile__menu-action:hover,
+.user-profile__menu-action:focus-visible {
+  border-color: var(--color-accent);
+  color: var(--color-accent);
+  outline: none;
+}
+
+@keyframes profile-menu-in {
+  from {
+    opacity: 0;
+    transform: translateY(-6px);
   }
 }
 
-@media (max-width: 600px) {
-  .user-profile__info {
+/* На средних экранах в шапке остаётся только аватар, подробности — в меню */
+@media (max-width: 1200px) {
+  .user-profile__info,
+  .user-profile__chevron {
     display: none;
+  }
+
+  .user-profile__trigger {
+    padding: 4px;
   }
 }
