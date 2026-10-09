@@ -5,6 +5,17 @@
   background: var(--color-surface);
 }
 
+/* Оформление под тему (класс ставит Footer через useTheme) */
+.footer--dark {
+  background:
+    radial-gradient(60% 120% at 50% 0%, rgba(255, 61, 104, 0.08), transparent 70%),
+    var(--color-surface);
+}
+
+.footer--light {
+  background: var(--color-surface-raised);
+}
+
 .footer__top {
   display: flex;
   align-items: center;

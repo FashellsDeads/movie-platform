@@ -1,3 +1,5 @@
+import { useCart } from '../../context/cart/useCart.js'
+import { toTicket } from '../../utils/movies.js'
 import Badge from '../Badge/Badge.jsx'
 import Button from '../Button/Button.jsx'
 import Modal from '../Modal/Modal.jsx'
@@ -13,10 +15,18 @@ import './QuickViewModal.css'
  */
 
 /**
- * Окно быстрого просмотра фильма: трейлер, описание, билеты на премьеру.
+ * Окно быстрого просмотра фильма: трейлер, описание, билеты на показ.
+ * Билеты добавляются в корзину через CartContext.
  * @param {QuickViewModalProps} props
  */
 function QuickViewModal({ isOpen, movie, onClose }) {
+  const { addToCart } = useCart()
+
+  const handleAddTickets = (quantity) => {
+    addToCart(toTicket(movie), quantity)
+    onClose()
+  }
+
   return (
     <Modal isOpen={isOpen && movie !== null} title={movie?.title ?? ''} onClose={onClose}>
       {movie && (
@@ -36,14 +46,15 @@ function QuickViewModal({ isOpen, movie, onClose }) {
           <RatingStars score={movie.score} reviewsCount={movie.reviewsCount} />
           <p className="quick-view__description">{movie.description}</p>
 
-          {movie.ticketPrice && <QuantitySelector unitPrice={movie.ticketPrice} />}
+          <QuantitySelector
+            unitPrice={movie.ticketPrice}
+            label={movie.isAvailable ? 'Билеты в зал CineVibe Hall' : 'Билеты на премьеру'}
+            confirmText="В мои билеты"
+            onConfirm={handleAddTickets}
+          />
 
           <div className="quick-view__actions">
-            {movie.isAvailable ? (
-              <Button text="Начать просмотр" variant="primary" onClick={onClose} />
-            ) : (
-              <Button text="Купить билеты" variant="primary" onClick={onClose} />
-            )}
+            {movie.isAvailable && <Button text="Начать просмотр" variant="primary" onClick={onClose} />}
             <Button text="Закрыть" variant="outline" onClick={onClose} />
           </div>
         </div>

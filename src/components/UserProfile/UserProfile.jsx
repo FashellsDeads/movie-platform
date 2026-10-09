@@ -13,13 +13,14 @@ import './UserProfile.css'
  * @typedef {Object} UserProfileProps
  * @property {User} user — текущий пользователь
  * @property {() => void} onManageSubscription — открыть управление подпиской
+ * @property {() => void} onLogout — выйти из аккаунта
  */
 
 /**
  * Профиль зрителя в шапке сайта с выпадающим меню.
  * @param {UserProfileProps} props
  */
-function UserProfile({ user, onManageSubscription }) {
+function UserProfile({ user, onManageSubscription, onLogout }) {
   const { name, avatarUrl, role, email } = user
   const [isMenuOpen, setIsMenuOpen] = useState(false)
   const profileRef = useRef(null)
@@ -68,6 +69,13 @@ function UserProfile({ user, onManageSubscription }) {
           <span className="user-profile__menu-role">{role}</span>
           <button type="button" className="user-profile__menu-action" onClick={handleManageSubscription}>
             Управление подпиской
+          </button>
+          <button
+            type="button"
+            className="user-profile__menu-action user-profile__menu-action--quiet"
+            onClick={onLogout}
+          >
+            Выйти
           </button>
         </div>
       )}

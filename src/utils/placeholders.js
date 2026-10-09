@@ -37,6 +37,19 @@ export function createPoster(letter, [from, to]) {
 }
 
 /**
+ * Инициалы из имени: «Жумагали Адильжан» → «ЖА».
+ * @param {string} name
+ * @returns {string}
+ */
+export const getInitials = (name) =>
+  name
+    .trim()
+    .split(/\s+/)
+    .slice(0, 2)
+    .map((word) => word[0].toUpperCase())
+    .join('')
+
+/**
  * Круглый аватар с инициалами.
  * @param {string} initials — 1–2 буквы
  * @param {string} color — цвет фона

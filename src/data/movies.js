@@ -4,6 +4,7 @@ export const ALL_CATEGORY = 'Все'
 
 export const categories = [ALL_CATEGORY, 'Фантастика', 'Драма', 'Триллер', 'Комедия', 'Анимация']
 
+// ticketPrice — цена билета на показ в зале CineVibe Hall (ДЗ №5, корзина билетов).
 // Цвет бейджа зависит от смысла статуса:
 // green — новинка, yellow — хит / скоро, red — возрастное ограничение.
 export const movies = [
@@ -19,6 +20,7 @@ export const movies = [
     reviewsCount: 18452,
     status: { label: 'Новинка', colorScheme: 'green' },
     isAvailable: true,
+    ticketPrice: 2500,
     imageUrl: createPoster('Д', ['#c2410c', '#1c1917']),
   },
   {
@@ -33,6 +35,7 @@ export const movies = [
     reviewsCount: 42310,
     status: { label: 'Хит', colorScheme: 'yellow' },
     isAvailable: true,
+    ticketPrice: 2500,
     imageUrl: createPoster('И', ['#1e3a8a', '#020617']),
   },
   {
@@ -47,6 +50,7 @@ export const movies = [
     reviewsCount: 21784,
     status: { label: '16+', colorScheme: 'red' },
     isAvailable: true,
+    ticketPrice: 2500,
     imageUrl: createPoster('О', ['#b45309', '#171717']),
   },
   {
@@ -61,6 +65,7 @@ export const movies = [
     reviewsCount: 35120,
     status: { label: '18+', colorScheme: 'red' },
     isAvailable: true,
+    ticketPrice: 2500,
     imageUrl: createPoster('Д', ['#15803d', '#3b0764']),
   },
   {
@@ -75,6 +80,7 @@ export const movies = [
     reviewsCount: 39876,
     status: { label: 'Хит', colorScheme: 'yellow' },
     isAvailable: true,
+    ticketPrice: 2500,
     imageUrl: createPoster('1', ['#0f766e', '#082f49']),
   },
   {
@@ -89,6 +95,7 @@ export const movies = [
     reviewsCount: 27403,
     status: { label: 'Классика', colorScheme: 'yellow' },
     isAvailable: true,
+    ticketPrice: 2500,
     imageUrl: createPoster('У', ['#be185d', '#312e81']),
   },
   {
@@ -103,6 +110,7 @@ export const movies = [
     reviewsCount: 12650,
     status: { label: 'Новинка', colorScheme: 'green' },
     isAvailable: true,
+    ticketPrice: 2500,
     imageUrl: createPoster('Г', ['#7c3aed', '#0e7490']),
   },
   {
@@ -117,6 +125,7 @@ export const movies = [
     reviewsCount: 24518,
     status: { label: '18+', colorScheme: 'red' },
     isAvailable: true,
+    ticketPrice: 2500,
     imageUrl: createPoster('П', ['#4d7c0f', '#1c1917']),
   },
   {
@@ -131,7 +140,7 @@ export const movies = [
     reviewsCount: 3120,
     status: { label: 'Скоро', colorScheme: 'yellow' },
     isAvailable: false,
-    // фильм ещё идёт в кинотеатрах — на премьерный показ можно купить билеты
+    // премьерный показ дороже обычного
     ticketPrice: 3500,
     imageUrl: createPoster('П', ['#0369a1', '#1e1b4b']),
   },

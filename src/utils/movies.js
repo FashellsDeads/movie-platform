@@ -14,6 +14,12 @@ const comparators = {
 export const sortMovies = (list, sortBy) => [...list].sort(comparators[sortBy])
 
 /**
+ * Билет для корзины из данных фильма.
+ * @param {{ id: number, title: string, ticketPrice: number, imageUrl: string }} movie
+ */
+export const toTicket = ({ id, title, ticketPrice, imageUrl }) => ({ id, title, price: ticketPrice, imageUrl })
+
+/**
  * Ищет фильмы по названию без учёта регистра.
  * @param {Array<{ title: string }>} list
  * @param {string} query

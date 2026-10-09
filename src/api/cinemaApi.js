@@ -4,6 +4,9 @@ import { ALL_CATEGORY, categories, movies } from '../data/movies.js'
 import { stats } from '../data/site.js'
 import { testimonials } from '../data/testimonials.js'
 import { searchMovies, sortMovies } from '../utils/movies.js'
+import { STORAGE_KEYS, readFromStorage } from '../utils/storage.js'
+
+const TOKEN_PREFIX = 'cinevibe-'
 
 /**
  * Пауза, которую можно прервать сигналом AbortController.
@@ -40,6 +43,23 @@ export async function fetchHomeData(signal) {
   await delay(700, signal)
   return { categories, stats, testimonials }
 }
+
+/**
+ * Проверка сохранённой сессии: «сервер» смотрит на токен и возвращает пользователя или null.
+ * @param {AbortSignal} [signal]
+ */
+export async function fetchSession(signal) {
+  await delay(600, signal)
+  const session = readFromStorage(STORAGE_KEYS.session, null)
+  const isTokenValid = typeof session?.token === 'string' && session.token.startsWith(TOKEN_PREFIX)
+  return isTokenValid ? session.user : null
+}
+
+/**
+ * Выдаёт «токен» для новой сессии.
+ * @param {string} email
+ */
+export const createSessionToken = (email) => `${TOKEN_PREFIX}${btoa(encodeURIComponent(email))}`
 
 /**
  * Страница каталога с учётом жанра, поиска и сортировки.

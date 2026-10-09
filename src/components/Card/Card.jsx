@@ -1,3 +1,7 @@
+import { useCart } from '../../context/cart/useCart.js'
+import { useTheme } from '../../context/theme/useTheme.js'
+import { formatNumber } from '../../utils/format.js'
+import { toTicket } from '../../utils/movies.js'
 import Badge from '../Badge/Badge.jsx'
 import Button from '../Button/Button.jsx'
 import FavoriteButton from '../FavoriteButton/FavoriteButton.jsx'
@@ -12,6 +16,7 @@ import './Card.css'
 
 /**
  * @typedef {Object} CardProps
+ * @property {number} id — id фильма
  * @property {string} title — название фильма
  * @property {string} description — краткое описание сюжета
  * @property {string} imageUrl — постер
@@ -22,6 +27,7 @@ import './Card.css'
  * @property {number} reviewsCount — количество отзывов
  * @property {MovieStatus} status — статус для бейджа
  * @property {boolean} isAvailable — можно ли смотреть фильм уже сейчас
+ * @property {number} ticketPrice — цена билета на показ в зале
  * @property {boolean} isFavorite — находится ли фильм в избранном
  * @property {() => void} onOpen — открыть быстрый просмотр
  * @property {(isFavorite: boolean) => void} onToggleFavorite — добавить / убрать из избранного
@@ -29,9 +35,11 @@ import './Card.css'
 
 /**
  * Карточка фильма в каталоге. Клик по любому месту карточки открывает быстрый просмотр.
+ * Тема (класс оформления) и корзина билетов берутся из контекстов.
  * @param {CardProps} props
  */
 function Card({
+  id,
   title,
   description,
   imageUrl,
@@ -42,10 +50,20 @@ function Card({
   reviewsCount,
   status,
   isAvailable,
+  ticketPrice,
   isFavorite,
   onOpen,
   onToggleFavorite,
 }) {
+  const { theme } = useTheme()
+  const { addToCart } = useCart()
+
+  const handleAddTicket = (event) => {
+    // кнопка внутри карточки: клик не должен открывать быстрый просмотр
+    event.stopPropagation()
+    addToCart(toTicket({ id, title, ticketPrice, imageUrl }))
+  }
+
   const handleKeyDown = (event) => {
     if (event.target !== event.currentTarget) return
     if (event.key === 'Enter' || event.key === ' ') {
@@ -56,7 +74,7 @@ function Card({
 
   return (
     <article
-      className="card"
+      className={`card card--${theme}`}
       tabIndex={0}
       aria-label={`${title}, открыть подробности`}
       onClick={onOpen}
@@ -85,8 +103,9 @@ function Card({
           {isAvailable ? (
             <Button text="Смотреть" variant="primary" />
           ) : (
-            <Button text="Билеты на премьеру" variant="outline" />
+            <Button text="Подробнее" variant="outline" />
           )}
+          <Button text={`+ ${formatNumber(ticketPrice)} ₸`} variant="secondary" onClick={handleAddTicket} />
         </div>
       </div>
     </article>

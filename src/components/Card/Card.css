@@ -88,10 +88,23 @@
 
 .card__actions {
   display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
   margin-top: auto;
   padding-top: 6px;
 }
 
 .card__actions .button {
-  flex: 1;
+  flex: 1 1 auto;
+  padding-inline: 12px;
+}
+
+/* Оформление под тему (класс ставит Card через useTheme):
+   в светлой теме фон карточки почти совпадает с фоном страницы, нужна тень */
+.card--light {
+  box-shadow: 0 1px 3px rgba(20, 20, 40, 0.08);
+}
+
+.card--light:hover {
+  box-shadow: 0 16px 40px rgba(20, 20, 40, 0.14);
 }

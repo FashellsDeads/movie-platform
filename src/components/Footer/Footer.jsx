@@ -1,3 +1,4 @@
+import { useTheme } from '../../context/theme/useTheme.js'
 import Container from '../Container/Container.jsx'
 import Logo from '../Logo/Logo.jsx'
 import './Footer.css'
@@ -13,20 +14,22 @@ import './Footer.css'
  * @typedef {Object} FooterProps
  * @property {string} copyrightText — год и авторские права
  * @property {SocialLink[]} socialLinks — ссылки на соцсети
- * @property {string} logoSrc — логотип под текущую тему
  */
 
 /**
- * Подвал сайта.
+ * Подвал сайта. Логотип и оформление зависят от темы из ThemeContext.
  * @param {FooterProps} props
  */
-function Footer({ copyrightText, socialLinks, logoSrc }) {
+function Footer({ copyrightText, socialLinks }) {
+  const { theme, isDarkMode } = useTheme()
+  const logoSrc = isDarkMode ? '/logo.svg' : '/logo-light.svg'
+
   return (
-    <footer className="footer">
+    <footer className={`footer footer--${theme}`}>
       <Container maxWidth={1320}>
         <div className="footer__top">
           <div className="footer__brand">
-            <Logo src={logoSrc}altText="CineVibe" width={126} height={30} />
+            <Logo src={logoSrc} altText="CineVibe" width={126} height={30} />
             <p className="footer__tagline">Фильмы, которые хочется обсуждать.</p>
           </div>
 

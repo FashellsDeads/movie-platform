@@ -126,6 +126,12 @@
   outline: none;
 }
 
+.user-profile__menu-action--quiet {
+  margin-top: 8px;
+  border-color: transparent;
+  color: var(--color-muted);
+}
+
 @keyframes profile-menu-in {
   from {
     opacity: 0;

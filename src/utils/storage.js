@@ -4,6 +4,8 @@
 export const STORAGE_KEYS = {
   favorites: 'cinevibe:favorites',
   theme: 'cinevibe:theme',
+  session: 'cinevibe:session',
+  tickets: 'cinevibe:tickets',
 }
 
 /**
@@ -30,5 +32,16 @@ export function writeToStorage(key, value) {
     localStorage.setItem(key, JSON.stringify(value))
   } catch {
     // хранилище недоступно — просто не сохраняем
+  }
+}
+
+/**
+ * @param {string} key
+ */
+export function removeFromStorage(key) {
+  try {
+    localStorage.removeItem(key)
+  } catch {
+    // хранилище недоступно — удалять нечего
   }
 }

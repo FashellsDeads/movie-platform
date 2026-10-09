@@ -20,6 +20,17 @@ export function pluralize(count, [one, few, many]) {
 }
 
 /**
+ * Сегодняшняя дата в формате YYYY-MM-DD по местному времени.
+ * @returns {string}
+ */
+export function todayIso() {
+  const now = new Date()
+  const month = String(now.getMonth() + 1).padStart(2, '0')
+  const day = String(now.getDate()).padStart(2, '0')
+  return `${now.getFullYear()}-${month}-${day}`
+}
+
+/**
  * Форматирует ISO-дату в вид «12 сентября 2026 г.».
  * @param {string} isoDate
  * @returns {string}
