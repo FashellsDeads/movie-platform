@@ -25,3 +25,10 @@
   background: var(--color-surface-raised);
   outline: none;
 }
+
+/* Активная страница (класс ставит NavLink через isActive) */
+.navigation__link--active,
+.navigation__link--active:hover {
+  color: var(--color-accent);
+  background: var(--color-surface-raised);
+}

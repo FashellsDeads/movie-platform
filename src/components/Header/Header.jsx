@@ -1,7 +1,9 @@
 import { useEffect, useState } from 'react'
+import { Link, useLocation, useNavigate } from 'react-router-dom'
 import { useAuth } from '../../context/auth/useAuth.js'
 import { useCart } from '../../context/cart/useCart.js'
 import { useTheme } from '../../context/theme/useTheme.js'
+import { useLogout } from '../../hooks/useLogout.js'
 import { formatNumber } from '../../utils/format.js'
 import Button from '../Button/Button.jsx'
 import Container from '../Container/Container.jsx'
@@ -20,19 +22,20 @@ const isMobileWidth = () => window.innerWidth < MOBILE_BREAKPOINT
  * @property {import('../Navigation/Navigation.jsx').NavItem[]} navItems — пункты меню
  * @property {number} favoritesCount — сколько фильмов в избранном
  * @property {() => void} onPremiumClick — открыть окно подписки
- * @property {() => void} onCartClick — открыть корзину билетов
  */
 
 /**
  * Шапка сайта: логотип, меню, избранное, билеты, тема, подписка и вход.
- * Тема, сессия и корзина берутся из контекстов (ДЗ №5), а не из props.
+ * Тема, сессия и корзина берутся из контекстов (ДЗ №5), переходы — через React Router (ДЗ №6).
  * На узких экранах меню прячется под бургер.
  * @param {HeaderProps} props
  */
-function Header({ navItems, favoritesCount, onPremiumClick, onCartClick }) {
+function Header({ navItems, favoritesCount, onPremiumClick }) {
   const { isDarkMode, toggleTheme } = useTheme()
-  const { user, isAuthenticated, isAuthChecking, openLogin, logout } = useAuth()
+  const { user, isAuthenticated, isAuthChecking } = useAuth()
   const { totalCount, totalPrice } = useCart()
+  const navigate = useNavigate()
+  const location = useLocation()
 
   const [isMobile, setIsMobile] = useState(isMobileWidth)
   const [isMenuOpen, setIsMenuOpen] = useState(false)
@@ -56,25 +59,30 @@ function Header({ navItems, favoritesCount, onPremiumClick, onCartClick }) {
     onPremiumClick()
   }
 
+  // ДЗ №6 · #6 — переходы из кода: на вход (с запоминанием текущей страницы) и на главную после выхода
+  const goToLogin = () => navigate('/login', { state: { from: location } })
+
+  const handleLogout = useLogout()
+
   const logoSrc = isDarkMode ? '/logo.svg' : '/logo-light.svg'
 
   const favorites = (
-    <span className="header__favorites" title="Фильмов в избранном">
+    <Link className="header__favorites" to="/favorites" title="Избранное" onClick={closeMenu}>
       <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true">
         <path d="M12 20.5s-7.5-4.6-9.3-9.4C1.5 7.9 3.6 4.5 7 4.5c2 0 3.5 1.1 5 3 1.5-1.9 3-3 5-3 3.4 0 5.5 3.4 4.3 6.6-1.8 4.8-9.3 9.4-9.3 9.4z" />
       </svg>
       <span className="visually-hidden">В избранном:</span>
       {favoritesCount}
-    </span>
+    </Link>
   )
 
   let account
   if (isAuthChecking) {
     account = <span className="header__account-placeholder" role="status" aria-label="Проверяем вход" />
   } else if (isAuthenticated) {
-    account = <UserProfile user={user} onManageSubscription={onPremiumClick} onLogout={logout} />
+    account = <UserProfile user={user} onManageSubscription={onPremiumClick} onLogout={handleLogout} />
   } else {
-    account = <Button text="Войти" variant="outline" onClick={openLogin} />
+    account = <Button text="Войти" variant="outline" onClick={goToLogin} />
   }
 
   return (
@@ -87,19 +95,13 @@ function Header({ navItems, favoritesCount, onPremiumClick, onCartClick }) {
 
           <div className="header__actions">
             {!isMobile && favorites}
-            <button
-              type="button"
-              className="header__tickets"
-              aria-label={`Мои билеты: ${totalCount}`}
-              title="Мои билеты"
-              onClick={onCartClick}
-            >
+            <Link className="header__tickets" to="/tickets" aria-label={`Мои билеты: ${totalCount}`} title="Мои билеты">
               <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true">
                 <path d="M4 7a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v2a2 2 0 0 0 0 4v2a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2v-2a2 2 0 0 0 0-4zM14 5v14" />
               </svg>
               <span>{totalCount}</span>
               {totalCount > 0 && <span className="header__tickets-sum">· {formatNumber(totalPrice)} ₸</span>}
-            </button>
+            </Link>
             {!isMobile && <ThemeToggle isDarkMode={isDarkMode} onToggle={toggleTheme} />}
             {!isMobile && <Button text="Premium" variant="secondary" onClick={onPremiumClick} />}
             {account}

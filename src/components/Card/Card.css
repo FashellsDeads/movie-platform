@@ -1,20 +1,39 @@
 .card {
+  position: relative;
   display: flex;
   flex-direction: column;
   overflow: hidden;
   border: 1px solid var(--color-border);
   border-radius: var(--radius-lg);
   background: var(--color-surface);
-  cursor: pointer;
   transition:
     transform 0.25s ease,
     border-color 0.25s ease,
     box-shadow 0.25s ease;
 }
 
-.card:focus-visible {
+/* Ссылка в названии растянута на всю карточку: клик в любом месте открывает фильм */
+.card__link::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  border-radius: inherit;
+}
+
+.card__link:focus-visible {
+  outline: none;
+}
+
+.card:has(.card__link:focus-visible) {
   outline: 2px solid var(--color-accent);
   outline-offset: 3px;
+}
+
+/* Кнопки лежат поверх растянутой ссылки, чтобы нажимались сами */
+.card__favorite,
+.card__actions {
+  z-index: 2;
 }
 
 .card:hover {
@@ -87,6 +106,7 @@
 }
 
 .card__actions {
+  position: relative;
   display: flex;
   flex-wrap: wrap;
   gap: 8px;

@@ -126,6 +126,12 @@
   outline: none;
 }
 
+a.user-profile__menu-action {
+  display: block;
+  margin-bottom: 8px;
+  text-align: center;
+}
+
 .user-profile__menu-action--quiet {
   margin-top: 8px;
   border-color: transparent;

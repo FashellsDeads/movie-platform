@@ -20,6 +20,18 @@ export const MAX_TICKETS_PER_MOVIE = 10
  * @property {() => void} clearCart — очистить корзину
  * @property {number} totalCount — всего билетов
  * @property {number} totalPrice — общая стоимость в тенге
+ * @property {Order[]} orders — оформленные заказы, новые первыми
+ * @property {(email: string) => string} placeOrder — оформить корзину, вернуть номер заказа
+ */
+
+/**
+ * @typedef {Object} Order
+ * @property {string} id — номер заказа, например CV-0001
+ * @property {string} date — дата в формате YYYY-MM-DD
+ * @property {string} email — куда «отправлены» билеты
+ * @property {CartItem[]} items — билеты
+ * @property {number} totalCount — всего билетов
+ * @property {number} totalPrice — сумма в тенге
  */
 
 /** ДЗ №5 · CartContext — корзина билетов на кинопоказы. */

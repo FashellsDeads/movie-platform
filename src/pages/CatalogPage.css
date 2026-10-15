@@ -1,0 +1,13 @@
+.catalog-toolbar {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 12px 20px;
+  margin-bottom: 16px;
+}
+
+.catalog-status {
+  margin: -12px 0 20px;
+  font-size: 0.875rem;
+  color: var(--color-muted);
+}

@@ -1,3 +1,4 @@
+import { Link } from 'react-router-dom'
 import './Logo.css'
 
 /**
@@ -9,14 +10,14 @@ import './Logo.css'
  */
 
 /**
- * Логотип онлайн-кинотеатра — ссылка на главный экран.
+ * Логотип онлайн-кинотеатра — ссылка на главную страницу (Link без перезагрузки).
  * @param {LogoProps} props
  */
 function Logo({ src, altText, width, height }) {
   return (
-    <a className="logo" href="#home" aria-label={`${altText} — на главную`}>
-      <img src={src} alt={altText} width={width} height={height} />
-    </a>
+    <Link className="logo" to="/" aria-label={`${altText} — на главную`}>
+      <img src={src} alt="" width={width} height={height} />
+    </Link>
   )
 }
 

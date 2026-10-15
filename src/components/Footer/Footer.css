@@ -38,6 +38,28 @@
   color: var(--color-muted);
 }
 
+.footer__links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 24px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.footer__link {
+  font-size: 0.9375rem;
+  font-weight: 600;
+  color: var(--color-muted);
+  transition: color 0.2s ease;
+}
+
+.footer__link:hover,
+.footer__link:focus-visible {
+  color: var(--color-accent);
+  outline: none;
+}
+
 .footer__socials {
   display: flex;
   gap: 10px;

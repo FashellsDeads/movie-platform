@@ -1,6 +1,6 @@
 import { useState } from 'react'
+import { Link, useLocation } from 'react-router-dom'
 import { useAuth } from '../../context/auth/useAuth.js'
-import Button from '../Button/Button.jsx'
 import './ReviewForm.css'
 
 const MAX_LENGTH = 300
@@ -23,7 +23,8 @@ const MAX_LENGTH = 300
  * @param {ReviewFormProps} props
  */
 function ReviewForm({ onSubmit }) {
-  const { user, isAuthenticated, isAuthChecking, openLogin } = useAuth()
+  const { user, isAuthenticated, isAuthChecking } = useAuth()
+  const location = useLocation()
   const [text, setText] = useState('')
 
   if (isAuthChecking) return null
@@ -32,7 +33,10 @@ function ReviewForm({ onSubmit }) {
     return (
       <div className="review-form review-form--locked">
         <p className="review-form__locked-text">Отзывы могут оставлять только зрители, которые вошли в аккаунт.</p>
-        <Button text="Войти, чтобы оставить отзыв" variant="primary" onClick={openLogin} />
+        {/* после входа LoginPage вернёт обратно на эту страницу */}
+        <Link className="link-button link-button--primary" to="/login" state={{ from: location }}>
+          Войти, чтобы оставить отзыв
+        </Link>
       </div>
     )
   }

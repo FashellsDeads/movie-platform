@@ -62,6 +62,16 @@ export async function fetchSession(signal) {
 export const createSessionToken = (email) => `${TOKEN_PREFIX}${btoa(encodeURIComponent(email))}`
 
 /**
+ * Один фильм по id — для страницы /movie/:id. Несуществующий id даёт null.
+ * @param {number} id
+ * @param {AbortSignal} [signal]
+ */
+export async function fetchMovie(id, signal) {
+  await delay(randomLatency(), signal)
+  return movies.find((movie) => movie.id === id) ?? null
+}
+
+/**
  * Страница каталога с учётом жанра, поиска и сортировки.
  * @param {{ category: string, query: string, sortBy: string, page: number, perPage: number }} params
  * @param {AbortSignal} [signal]

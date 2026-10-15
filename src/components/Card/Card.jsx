@@ -1,3 +1,4 @@
+import { Link, useNavigate } from 'react-router-dom'
 import { useCart } from '../../context/cart/useCart.js'
 import { useTheme } from '../../context/theme/useTheme.js'
 import { formatNumber } from '../../utils/format.js'
@@ -16,7 +17,7 @@ import './Card.css'
 
 /**
  * @typedef {Object} CardProps
- * @property {number} id — id фильма
+ * @property {number} id — id фильма (из него строится адрес /movie/:id)
  * @property {string} title — название фильма
  * @property {string} description — краткое описание сюжета
  * @property {string} imageUrl — постер
@@ -29,13 +30,12 @@ import './Card.css'
  * @property {boolean} isAvailable — можно ли смотреть фильм уже сейчас
  * @property {number} ticketPrice — цена билета на показ в зале
  * @property {boolean} isFavorite — находится ли фильм в избранном
- * @property {() => void} onOpen — открыть быстрый просмотр
  * @property {(isFavorite: boolean) => void} onToggleFavorite — добавить / убрать из избранного
  */
 
 /**
- * Карточка фильма в каталоге. Клик по любому месту карточки открывает быстрый просмотр.
- * Тема (класс оформления) и корзина билетов берутся из контекстов.
+ * Карточка фильма. Название — ссылка на страницу фильма, растянутая на всю карточку,
+ * поэтому кликабельна вся карточка (ДЗ №6). Тема и корзина берутся из контекстов.
  * @param {CardProps} props
  */
 function Card({
@@ -52,36 +52,21 @@ function Card({
   isAvailable,
   ticketPrice,
   isFavorite,
-  onOpen,
   onToggleFavorite,
 }) {
   const { theme } = useTheme()
   const { addToCart } = useCart()
+  const navigate = useNavigate()
+  const moviePath = `/movie/${id}`
 
-  const handleAddTicket = (event) => {
-    // кнопка внутри карточки: клик не должен открывать быстрый просмотр
-    event.stopPropagation()
+  const handleAddTicket = () => {
     addToCart(toTicket({ id, title, ticketPrice, imageUrl }))
   }
 
-  const handleKeyDown = (event) => {
-    if (event.target !== event.currentTarget) return
-    if (event.key === 'Enter' || event.key === ' ') {
-      event.preventDefault()
-      onOpen()
-    }
-  }
-
   return (
-    <article
-      className={`card card--${theme}`}
-      tabIndex={0}
-      aria-label={`${title}, открыть подробности`}
-      onClick={onOpen}
-      onKeyDown={handleKeyDown}
-    >
+    <article className={`card card--${theme}`}>
       <div className="card__poster">
-        <img src={imageUrl} alt={`Постер фильма «${title}»`} loading="lazy" />
+        <img src={imageUrl} alt="" loading="lazy" />
         <div className="card__badge">
           <Badge label={status.label} colorScheme={status.colorScheme} />
         </div>
@@ -94,16 +79,19 @@ function Card({
         <p className="card__meta">
           {year} · {genre} · {duration}
         </p>
-        <h3 className="card__title">{title}</h3>
+        <h3 className="card__title">
+          <Link className="card__link" to={moviePath}>
+            {title}
+          </Link>
+        </h3>
         <RatingStars score={score} reviewsCount={reviewsCount} />
         <p className="card__description">{description}</p>
 
         <div className="card__actions">
-          {/* клик по кнопке всплывает до карточки и открывает быстрый просмотр */}
           {isAvailable ? (
-            <Button text="Смотреть" variant="primary" />
+            <Button text="Смотреть" variant="primary" onClick={() => navigate(moviePath)} />
           ) : (
-            <Button text="Подробнее" variant="outline" />
+            <Button text="Скоро онлайн" variant="outline" isDisabled />
           )}
           <Button text={`+ ${formatNumber(ticketPrice)} ₸`} variant="secondary" onClick={handleAddTicket} />
         </div>

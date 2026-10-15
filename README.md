@@ -11,8 +11,9 @@ npm run build    # production-сборка
 npm run lint     # проверка кода (oxlint)
 ```
 
-Каждое ДЗ сохранено отдельной версией: `git checkout hw2` … `git checkout hw5`, вернуться — `git checkout main`.
+Каждое ДЗ сохранено отдельной версией: `git checkout hw2` … `git checkout hw6`, вернуться — `git checkout main`.
 Таблицы ниже описывают код на момент своего ДЗ. С ДЗ №5 содержимое `App.jsx` переехало в `src/pages/HomePage.jsx`, а тема (вместе с эффектами ДЗ №4 #3 и #15) — в `ThemeProvider`.
+С ДЗ №6 сайт стал многостраничным: каталог (поиск, жанры, сортировка, пагинация) переехал с главной на `/movies`, окно фильма заменила страница `/movie/:id`, окна входа и корзины — страницы `/login` и `/tickets`.
 
 ## ДЗ №2 — передача данных через props
 
@@ -94,16 +95,63 @@ npm run lint     # проверка кода (oxlint)
 
 Prop drilling, который был в ДЗ №3–4 (`isDarkMode`, `logoSrc`, `onToggleTheme`, `user` передавались из App в Header и Footer), убран: эти компоненты берут данные из контекстов сами.
 
+## ДЗ №6 — навигация и маршрутизация (React Router)
+
+`react-router-dom` 7. `BrowserRouter` подключён в [`src/main.jsx`](src/main.jsx), карта маршрутов — в [`src/App.jsx`](src/App.jsx):
+
+| Адрес | Страница | Что показывает |
+|---|---|---|
+| `/` | `HomePage` | главная: баннер, «Популярное сейчас», статистика, отзывы |
+| `/movies` | `CatalogPage` | каталог: поиск, жанры, сортировка, пагинация — всё в адресе |
+| `/movie/:id` | `MovieDetailsPage` | страница фильма, билеты в зал, похожие фильмы |
+| `/favorites` | `FavoritesPage` | фильмы, отмеченные сердечком |
+| `/tickets` | `TicketsPage` | «Мои билеты» (корзина) и оформление |
+| `/about` | `AboutPage` | о кинотеатре, жанры, Premium, контакты |
+| `/login` | `LoginPage` | вход; после него возвращает туда, откуда пришли |
+| `/profile` → `/profile/orders`, `/profile/settings` | `ProfileLayout` + вкладки | личный кабинет, **только после входа** |
+| `/catalog` | — | `<Navigate to="/movies" replace />` — старый адрес каталога |
+| `*` | `NotFoundPage` | 404 с кнопками «На главную» и «В каталог» |
+
+| # | Требование | Где реализовано |
+|---|---|---|
+| 1 | `BrowserRouter`, `Routes`, `Route` | `main.jsx`, `App.jsx`: главная `/`, список `/movies`, инфо `/about` |
+| 2 | 404 | `pages/NotFoundPage.jsx`, маршрут `*` последним в списке |
+| 3 | `Link` и `NavLink` | `Navigation` — `NavLink` с `className={({ isActive }) => …}` (у «Главной» `end`); `Link` в логотипе, подвале, карточках, шапке («Избранное», «Мои билеты»), меню аватара |
+| 4 | `useParams` | `MovieDetailsPage`: `const { id } = useParams()` → `fetchMovie(Number(id))`; неизвестный id — экран «Фильм не найден» |
+| 5 | `useSearchParams` | `CatalogPage`: `?genre=Драма&q=дюна&sort=year-desc&page=2`; значения читаются из адреса при загрузке, некорректные заменяются значениями по умолчанию, `page` за пределами — на последнюю страницу; поиск попадает в адрес с задержкой 500 мс и `replace` |
+| 6 | `useNavigate` | вход → `navigate(откуда пришли, { replace: true })`; оформление билетов → `navigate('/profile/orders', { state: { orderId } })`; выход → `navigate('/', { replace: true })`; «← Назад» на странице фильма → `navigate(-1)`; кнопка «Смотреть» |
+| 7 | `Outlet`, вложенные маршруты | `layouts/MainLayout.jsx` — Header + `<Outlet />` + Footer для всех страниц (через `context` передаёт тосты и окно Premium); `pages/profile/ProfileLayout.jsx` — вкладки кабинета и свой `<Outlet />` |
+| 8 | `ProtectedRoute` + `Navigate` | `routes/ProtectedRoute.jsx`: пока проверяется сессия — «Проверяем вход…», гостя — `<Navigate to="/login" replace state={{ from: location }} />` |
+
+Что ещё поменялось:
+
+- **Избранное** стало глобальным (`context/favorites/`) — его используют шапка, каталог, страница фильма и `/favorites`; хранится в localStorage.
+- **История заказов** в `CartContext` (`orders`, `placeOrder`) — для вкладки «Мои заказы».
+- Заголовок вкладки браузера свой у каждой страницы (`hooks/useDocumentTitle.js`); при смене адреса страница прокручивается наверх.
+
+Как проверить на сайте:
+
+1. Пункты меню подсвечиваются, адрес меняется без перезагрузки; «Назад»/«Вперёд» браузера работают.
+2. `/movies`: выберите жанр и сортировку, введите поиск — всё видно в адресе. Скопируйте ссылку в новую вкладку — фильтры те же.
+3. Клик по карточке → `/movie/1`; `/movie/999` — «Фильм не найден»; `/что-угодно` — 404.
+4. Без входа откройте `/profile/orders` → попадёте на `/login`, после входа вернётесь в «Мои заказы».
+5. Добавьте билеты, «Оформить» на `/tickets` → «Мои заказы» с номером нового заказа.
+
 ## Структура
 
 ```
 src/
 ├── api/            # имитация сервера: загрузка с задержкой и отменой, проверка сессии
 ├── components/     # компоненты, каждый в своей папке со своими стилями
-├── context/        # ДЗ №5: theme/, auth/, cart/ — контекст, провайдер и хук в каждой
+├── context/        # theme/, auth/, cart/, favorites/ — контекст, провайдер и хук в каждой
 ├── data/           # моковые данные: фильмы, навигация, статистика, отзывы
-├── pages/          # HomePage — состояние и разметка главной страницы
+├── hooks/          # useDocumentTitle, useLayout, useLogout, useToggleFavorite
+├── layouts/        # MainLayout — шапка, <Outlet />, подвал, окно Premium, тосты
+├── pages/          # страницы маршрутов; profile/ — личный кабинет с вложенными вкладками
+├── routes/         # ProtectedRoute
+├── styles/         # общие стили страниц (секции, сетки, пустые состояния, ссылки-кнопки)
 ├── utils/          # форматирование, поиск и сортировка, localStorage, генерация постеров и аватаров
-├── App.jsx         # провайдеры контекстов вокруг страницы
+├── App.jsx         # провайдеры контекстов и карта маршрутов
+├── main.jsx        # BrowserRouter
 └── index.css       # дизайн-токены (CSS-переменные) и базовые стили
 ```

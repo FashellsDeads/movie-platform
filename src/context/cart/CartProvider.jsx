@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useMemo, useState } from 'react'
+import { todayIso } from '../../utils/format.js'
 import { STORAGE_KEYS, readFromStorage, writeToStorage } from '../../utils/storage.js'
 import { CartContext, MAX_TICKETS_PER_MOVIE } from './CartContext.js'
 
@@ -12,9 +13,16 @@ export function CartProvider({ children }) {
   // корзина переживает перезагрузку страницы: читаем её один раз при создании состояния
   const [cartItems, setCartItems] = useState(() => readFromStorage(STORAGE_KEYS.tickets, []))
 
+  // ДЗ №6 · история оформленных заказов для страницы /profile/orders
+  const [orders, setOrders] = useState(() => readFromStorage(STORAGE_KEYS.orders, []))
+
   useEffect(() => {
     writeToStorage(STORAGE_KEYS.tickets, cartItems)
   }, [cartItems])
+
+  useEffect(() => {
+    writeToStorage(STORAGE_KEYS.orders, orders)
+  }, [orders])
 
   const addToCart = useCallback((item, quantity = 1) => {
     setCartItems((prev) => {
@@ -44,9 +52,31 @@ export function CartProvider({ children }) {
   const totalCount = cartItems.reduce((sum, cartItem) => sum + cartItem.quantity, 0)
   const totalPrice = cartItems.reduce((sum, cartItem) => sum + cartItem.quantity * cartItem.price, 0)
 
+  // Оформление: билеты переезжают из корзины в новый заказ, корзина очищается
+  const placeOrder = useCallback(
+    (email) => {
+      const orderId = `CV-${String(orders.length + 1).padStart(4, '0')}`
+      const order = { id: orderId, date: todayIso(), email, items: cartItems, totalCount, totalPrice }
+      setOrders((prev) => [order, ...prev])
+      setCartItems([])
+      return orderId
+    },
+    [orders.length, cartItems, totalCount, totalPrice],
+  )
+
   const value = useMemo(
-    () => ({ cartItems, addToCart, removeFromCart, updateQuantity, clearCart, totalCount, totalPrice }),
-    [cartItems, addToCart, removeFromCart, updateQuantity, clearCart, totalCount, totalPrice],
+    () => ({
+      cartItems,
+      addToCart,
+      removeFromCart,
+      updateQuantity,
+      clearCart,
+      totalCount,
+      totalPrice,
+      orders,
+      placeOrder,
+    }),
+    [cartItems, addToCart, removeFromCart, updateQuantity, clearCart, totalCount, totalPrice, orders, placeOrder],
   )
 
   return <CartContext.Provider value={value}>{children}</CartContext.Provider>

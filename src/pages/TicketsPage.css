@@ -6,7 +6,12 @@
   list-style: none;
 }
 
+.tickets__title:hover {
+  color: var(--color-accent);
+}
+
 .tickets__item {
+  background: var(--color-surface);
   display: grid;
   grid-template-columns: 48px 1fr auto auto auto;
   align-items: center;
@@ -28,6 +33,7 @@
 }
 
 .tickets__title {
+  display: block;
   margin: 0;
   overflow: hidden;
   font-weight: 700;

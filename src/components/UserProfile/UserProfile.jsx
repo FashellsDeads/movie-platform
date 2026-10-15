@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from 'react'
+import { Link } from 'react-router-dom'
 import './UserProfile.css'
 
 /**
@@ -67,6 +68,9 @@ function UserProfile({ user, onManageSubscription, onLogout }) {
           <p className="user-profile__menu-name">{name}</p>
           <p className="user-profile__menu-email">{email}</p>
           <span className="user-profile__menu-role">{role}</span>
+          <Link className="user-profile__menu-action" to="/profile" onClick={() => setIsMenuOpen(false)}>
+            Личный кабинет
+          </Link>
           <button type="button" className="user-profile__menu-action" onClick={handleManageSubscription}>
             Управление подпиской
           </button>

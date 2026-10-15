@@ -10,7 +10,6 @@ import { AuthContext } from './AuthContext.js'
 export function AuthProvider({ children }) {
   const [user, setUser] = useState(null)
   const [isAuthChecking, setIsAuthChecking] = useState(true)
-  const [isLoginOpen, setIsLoginOpen] = useState(false)
 
   // Имитация проверки сохранённого токена при загрузке приложения
   useEffect(() => {
@@ -33,7 +32,6 @@ export function AuthProvider({ children }) {
   const login = useCallback((userData) => {
     writeToStorage(STORAGE_KEYS.session, { token: createSessionToken(userData.email), user: userData })
     setUser(userData)
-    setIsLoginOpen(false)
   }, [])
 
   const logout = useCallback(() => {
@@ -41,21 +39,10 @@ export function AuthProvider({ children }) {
     setUser(null)
   }, [])
 
-  const openLogin = useCallback(() => setIsLoginOpen(true), [])
-  const closeLogin = useCallback(() => setIsLoginOpen(false), [])
-
+  // с ДЗ №6 вход — отдельная страница /login, поэтому состояния окна входа здесь больше нет
   const value = useMemo(
-    () => ({
-      user,
-      isAuthenticated: user !== null,
-      isAuthChecking,
-      login,
-      logout,
-      isLoginOpen,
-      openLogin,
-      closeLogin,
-    }),
-    [user, isAuthChecking, login, logout, isLoginOpen, openLogin, closeLogin],
+    () => ({ user, isAuthenticated: user !== null, isAuthChecking, login, logout }),
+    [user, isAuthChecking, login, logout],
   )
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>

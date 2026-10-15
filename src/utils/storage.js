@@ -6,6 +6,7 @@ export const STORAGE_KEYS = {
   theme: 'cinevibe:theme',
   session: 'cinevibe:session',
   tickets: 'cinevibe:tickets',
+  orders: 'cinevibe:orders',
 }
 
 /**

@@ -1,0 +1,96 @@
+.movie-details {
+  display: grid;
+  grid-template-columns: minmax(220px, 340px) 1fr;
+  gap: clamp(24px, 4vw, 48px);
+  align-items: start;
+}
+
+.movie-details__poster {
+  position: relative;
+  overflow: hidden;
+  aspect-ratio: 2 / 3;
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-lg);
+}
+
+.movie-details__poster img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.movie-details__favorite {
+  position: absolute;
+  top: 14px;
+  right: 14px;
+}
+
+.movie-details__info {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 16px;
+}
+
+.movie-details__meta {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 12px;
+  font-size: 0.9375rem;
+  color: var(--color-muted);
+}
+
+.movie-details__title {
+  margin: 0;
+  font-size: clamp(2rem, 4vw, 3rem);
+  font-weight: 800;
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+  color: var(--color-text);
+}
+
+.movie-details__description {
+  max-width: 640px;
+  margin: 0;
+  font-size: 1.0625rem;
+  color: var(--color-text);
+}
+
+.movie-details__availability {
+  margin: 0;
+  color: var(--color-muted);
+}
+
+.movie-details__info .quantity {
+  max-width: 640px;
+}
+
+.movie-details__similar {
+  margin-top: clamp(48px, 7vw, 80px);
+}
+
+/* Скелетон, пока фильм загружается */
+.movie-details__poster-skeleton {
+  aspect-ratio: 2 / 3;
+}
+
+.movie-details__line-skeleton {
+  width: 100%;
+  height: 44px;
+}
+
+.movie-details__line-skeleton--short {
+  width: 60%;
+  height: 120px;
+}
+
+@media (max-width: 720px) {
+  .movie-details {
+    grid-template-columns: 1fr;
+  }
+
+  .movie-details__poster {
+    max-width: 320px;
+  }
+}

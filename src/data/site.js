@@ -2,12 +2,27 @@ import { createAvatar } from '../utils/placeholders.js'
 
 export const SITE_NAME = 'CineVibe'
 
+// С ДЗ №6 ссылки ведут на маршруты React Router, а не на якоря секций
 export const navItems = [
-  { id: 'home', label: 'Главная', link: '#home' },
-  { id: 'catalog', label: 'Каталог', link: '#catalog' },
-  { id: 'stats', label: 'Статистика', link: '#stats' },
-  { id: 'reviews', label: 'Отзывы', link: '#reviews' },
+  { id: 'home', label: 'Главная', link: '/' },
+  { id: 'movies', label: 'Фильмы', link: '/movies' },
+  { id: 'favorites', label: 'Избранное', link: '/favorites' },
+  { id: 'about', label: 'О кинотеатре', link: '/about' },
 ]
+
+export const footerLinks = [
+  { id: 'movies', label: 'Каталог фильмов', link: '/movies' },
+  { id: 'tickets', label: 'Мои билеты', link: '/tickets' },
+  { id: 'profile', label: 'Личный кабинет', link: '/profile' },
+  { id: 'about', label: 'О кинотеатре', link: '/about' },
+]
+
+export const cinemaInfo = {
+  address: 'Алматы, пр. Абая, 52 — зал CineVibe Hall',
+  phone: '+7 (727) 355-00-55',
+  email: 'hello@cinevibe.kz',
+  hours: 'Онлайн — круглосуточно, зал — с 10:00 до 02:00',
+}
 
 export const currentUser = {
   name: 'Жумагали Адильжан',

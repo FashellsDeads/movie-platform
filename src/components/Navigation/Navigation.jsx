@@ -1,10 +1,11 @@
+import { NavLink } from 'react-router-dom'
 import './Navigation.css'
 
 /**
  * @typedef {Object} NavItem
  * @property {string} id — уникальный ключ
  * @property {string} label — текст ссылки
- * @property {string} link — адрес (якорь секции)
+ * @property {string} link — адрес маршрута
  */
 
 /**
@@ -14,7 +15,7 @@ import './Navigation.css'
  */
 
 /**
- * Главное меню сайта.
+ * Главное меню сайта. ДЗ №6 · #3 — NavLink подсвечивает пункт текущей страницы.
  * @param {NavigationProps} props
  */
 function Navigation({ navItems, onItemClick }) {
@@ -23,9 +24,15 @@ function Navigation({ navItems, onItemClick }) {
       <ul className="navigation__list">
         {navItems.map((item) => (
           <li key={item.id}>
-            <a className="navigation__link" href={item.link} onClick={onItemClick}>
+            <NavLink
+              to={item.link}
+              // end: «Главная» активна только на "/", а не на каждой странице
+              end={item.link === '/'}
+              className={({ isActive }) => (isActive ? 'navigation__link navigation__link--active' : 'navigation__link')}
+              onClick={onItemClick}
+            >
               {item.label}
-            </a>
+            </NavLink>
           </li>
         ))}
       </ul>

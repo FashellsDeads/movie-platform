@@ -1,3 +1,4 @@
+import { Link } from 'react-router-dom'
 import { useTheme } from '../../context/theme/useTheme.js'
 import Container from '../Container/Container.jsx'
 import Logo from '../Logo/Logo.jsx'
@@ -14,13 +15,14 @@ import './Footer.css'
  * @typedef {Object} FooterProps
  * @property {string} copyrightText — год и авторские права
  * @property {SocialLink[]} socialLinks — ссылки на соцсети
+ * @property {import('../Navigation/Navigation.jsx').NavItem[]} links — внутренние разделы сайта
  */
 
 /**
  * Подвал сайта. Логотип и оформление зависят от темы из ThemeContext.
  * @param {FooterProps} props
  */
-function Footer({ copyrightText, socialLinks }) {
+function Footer({ copyrightText, socialLinks, links }) {
   const { theme, isDarkMode } = useTheme()
   const logoSrc = isDarkMode ? '/logo.svg' : '/logo-light.svg'
 
@@ -32,6 +34,19 @@ function Footer({ copyrightText, socialLinks }) {
             <Logo src={logoSrc} altText="CineVibe" width={126} height={30} />
             <p className="footer__tagline">Фильмы, которые хочется обсуждать.</p>
           </div>
+
+          {/* ДЗ №6 · #3 — внутренние ссылки через Link: переход без перезагрузки страницы */}
+          <nav aria-label="Разделы сайта">
+            <ul className="footer__links">
+              {links.map((item) => (
+                <li key={item.id}>
+                  <Link className="footer__link" to={item.link}>
+                    {item.label}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </nav>
 
           <ul className="footer__socials">
             {socialLinks.map(({ platform, url, icon }) => (
