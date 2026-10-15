@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { Outlet, useLocation } from 'react-router-dom'
 import Button from '../components/Button/Button.jsx'
+import ErrorBoundary from '../components/ErrorBoundary/ErrorBoundary.jsx'
 import Footer from '../components/Footer/Footer.jsx'
 import Header from '../components/Header/Header.jsx'
 import Modal from '../components/Modal/Modal.jsx'
@@ -52,7 +53,9 @@ function MainLayout() {
 
       <main>
         {/* страницы получают общие действия каркаса через useOutletContext() */}
-        <Outlet context={{ showToast, openPremium }} />
+        <ErrorBoundary resetKey={pathname}>
+          <Outlet context={{ showToast, openPremium }} />
+        </ErrorBoundary>
       </main>
 
       <Footer copyrightText={copyrightText} socialLinks={socialLinks} links={footerLinks} />

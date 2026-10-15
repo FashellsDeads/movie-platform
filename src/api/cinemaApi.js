@@ -36,11 +36,22 @@ function delay(ms, signal) {
 const randomLatency = () => 300 + Math.round(Math.random() * 600)
 
 /**
+ * Ответ «сервера» после задержки. Без сети запрос падает, как настоящий fetch, —
+ * так экран ошибки можно проверить через DevTools → Network → Offline.
+ * @param {number} ms
+ * @param {AbortSignal} [signal]
+ */
+async function respond(ms, signal) {
+  await delay(ms, signal)
+  if (!navigator.onLine) throw new Error('Нет подключения к интернету. Проверьте сеть и попробуйте снова.')
+}
+
+/**
  * Данные главной страницы: справочник жанров, статистика, отзывы.
  * @param {AbortSignal} [signal]
  */
 export async function fetchHomeData(signal) {
-  await delay(700, signal)
+  await respond(700, signal)
   return { categories, stats, testimonials }
 }
 
@@ -67,7 +78,7 @@ export const createSessionToken = (email) => `${TOKEN_PREFIX}${btoa(encodeURICom
  * @param {AbortSignal} [signal]
  */
 export async function fetchMovie(id, signal) {
-  await delay(randomLatency(), signal)
+  await respond(randomLatency(), signal)
   return movies.find((movie) => movie.id === id) ?? null
 }
 
@@ -78,7 +89,7 @@ export async function fetchMovie(id, signal) {
  * @returns {Promise<{ items: typeof movies, total: number, totalPages: number }>}
  */
 export async function fetchMovies({ category, query, sortBy, page, perPage }, signal) {
-  await delay(randomLatency(), signal)
+  await respond(randomLatency(), signal)
 
   const inCategory = category === ALL_CATEGORY ? movies : movies.filter((movie) => movie.genre === category)
   const found = sortMovies(searchMovies(inCategory, query), sortBy)

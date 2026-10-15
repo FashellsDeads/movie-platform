@@ -4,6 +4,7 @@ import { fetchMovies } from '../api/cinemaApi.js'
 import Button from '../components/Button/Button.jsx'
 import CategoryFilter from '../components/CategoryFilter/CategoryFilter.jsx'
 import Container from '../components/Container/Container.jsx'
+import ErrorState from '../components/ErrorState/ErrorState.jsx'
 import MovieGrid from '../components/MovieGrid/MovieGrid.jsx'
 import Pagination from '../components/Pagination/Pagination.jsx'
 import SearchBar from '../components/SearchBar/SearchBar.jsx'
@@ -72,19 +73,21 @@ function CatalogPage() {
   }, [searchInput, query, updateParams])
 
   // ДЗ №4 · #9 + #13 — загрузка страницы каталога при смене параметров, устаревший запрос отменяется
-  const catalogRequestKey = JSON.stringify({ category: genre, query, sortBy, page, perPage: MOVIES_PER_PAGE })
-  const [catalog, setCatalog] = useState({ requestKey: null, items: [], total: 0, totalPages: 0 })
+  // attempt — номер попытки: «Повторить» после ошибки меняет ключ и запускает запрос заново
+  const [attempt, setAttempt] = useState(0)
+  const catalogRequestKey = JSON.stringify({ category: genre, query, sortBy, page, perPage: MOVIES_PER_PAGE, attempt })
+  const [catalog, setCatalog] = useState({ requestKey: null, items: [], total: 0, totalPages: 0, error: null })
   const isCatalogLoading = catalog.requestKey !== catalogRequestKey
+  const loadError = isCatalogLoading ? null : catalog.error
 
   useEffect(() => {
     const controller = new AbortController()
 
     fetchMovies(JSON.parse(catalogRequestKey), controller.signal)
-      .then((result) => setCatalog({ requestKey: catalogRequestKey, ...result }))
+      .then((result) => setCatalog({ requestKey: catalogRequestKey, ...result, error: null }))
       .catch((error) => {
         if (error.name === 'AbortError') return
-        console.error(error)
-        setCatalog({ requestKey: catalogRequestKey, items: [], total: 0, totalPages: 0 })
+        setCatalog({ requestKey: catalogRequestKey, items: [], total: 0, totalPages: 0, error: error.message })
       })
 
     return () => controller.abort()
@@ -107,7 +110,11 @@ function CatalogPage() {
 
   const isSearchPending = searchInput.trim() !== query
   const showSkeletons = isCatalogLoading && catalog.items.length === 0
-  const isCatalogEmpty = !isCatalogLoading && !isSearchPending && catalog.items.length === 0
+  const isCatalogEmpty = !isCatalogLoading && !isSearchPending && !loadError && catalog.items.length === 0
+
+  let statusText = `Найдено фильмов: ${catalog.total}`
+  if (isSearchPending || isCatalogLoading) statusText = 'Загружаем фильмы…'
+  else if (loadError) statusText = 'Каталог не загрузился'
 
   return (
     <section className="page">
@@ -134,7 +141,7 @@ function CatalogPage() {
         />
 
         <p className="catalog-status" aria-live="polite">
-          {isSearchPending || isCatalogLoading ? 'Загружаем фильмы…' : `Найдено фильмов: ${catalog.total}`}
+          {statusText}
         </p>
 
         {showSkeletons && (
@@ -145,7 +152,11 @@ function CatalogPage() {
           </div>
         )}
 
-        {!showSkeletons && !isCatalogEmpty && <MovieGrid movies={catalog.items} isLoading={isCatalogLoading} />}
+        {loadError && <ErrorState message={loadError} onRetry={() => setAttempt((prev) => prev + 1)} />}
+
+        {!showSkeletons && !isCatalogEmpty && !loadError && (
+          <MovieGrid movies={catalog.items} isLoading={isCatalogLoading} />
+        )}
 
         {isCatalogEmpty && (
           <div className="empty-state">

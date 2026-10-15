@@ -7,6 +7,8 @@ import { useLogout } from '../../hooks/useLogout.js'
 import { formatNumber } from '../../utils/format.js'
 import Button from '../Button/Button.jsx'
 import Container from '../Container/Container.jsx'
+import logoLight from '../../assets/logo-light.svg'
+import logoDark from '../../assets/logo.svg'
 import Logo from '../Logo/Logo.jsx'
 import Navigation from '../Navigation/Navigation.jsx'
 import ThemeToggle from '../ThemeToggle/ThemeToggle.jsx'
@@ -64,7 +66,7 @@ function Header({ navItems, favoritesCount, onPremiumClick }) {
 
   const handleLogout = useLogout()
 
-  const logoSrc = isDarkMode ? '/logo.svg' : '/logo-light.svg'
+  const logoSrc = isDarkMode ? logoDark : logoLight
 
   const favorites = (
     <Link className="header__favorites" to="/favorites" title="Избранное" onClick={closeMenu}>

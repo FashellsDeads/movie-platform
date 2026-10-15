@@ -1,6 +1,8 @@
 import { Link } from 'react-router-dom'
 import { useTheme } from '../../context/theme/useTheme.js'
 import Container from '../Container/Container.jsx'
+import logoLight from '../../assets/logo-light.svg'
+import logoDark from '../../assets/logo.svg'
 import Logo from '../Logo/Logo.jsx'
 import './Footer.css'
 
@@ -24,7 +26,7 @@ import './Footer.css'
  */
 function Footer({ copyrightText, socialLinks, links }) {
   const { theme, isDarkMode } = useTheme()
-  const logoSrc = isDarkMode ? '/logo.svg' : '/logo-light.svg'
+  const logoSrc = isDarkMode ? logoDark : logoLight
 
   return (
     <footer className={`footer footer--${theme}`}>

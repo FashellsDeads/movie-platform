@@ -8,7 +8,10 @@ import { FavoritesContext } from './FavoritesContext.js'
  */
 export function FavoritesProvider({ children }) {
   // избранное восстанавливается из localStorage один раз при создании состояния
-  const [favoriteIds, setFavoriteIds] = useState(() => readFromStorage(STORAGE_KEYS.favorites, []))
+  const [favoriteIds, setFavoriteIds] = useState(() => {
+    const saved = readFromStorage(STORAGE_KEYS.favorites, [])
+    return Array.isArray(saved) ? saved.filter(Number.isInteger) : []
+  })
 
   // ДЗ №4 · #2 — синхронизация избранного с localStorage при каждом изменении
   useEffect(() => {

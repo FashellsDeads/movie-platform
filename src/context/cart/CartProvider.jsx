@@ -5,13 +5,27 @@ import { CartContext, MAX_TICKETS_PER_MOVIE } from './CartContext.js'
 
 const clampQuantity = (quantity) => Math.min(Math.max(quantity, 1), MAX_TICKETS_PER_MOVIE)
 
+// localStorage мог быть изменён вручную или старой версией сайта — берём только корректные билеты,
+// иначе в шапке вместо суммы появился бы NaN
+const isValidCartItem = (item) =>
+  Number.isInteger(item?.id) &&
+  typeof item.title === 'string' &&
+  Number.isFinite(item.price) &&
+  Number.isInteger(item.quantity) &&
+  item.quantity > 0
+
+const readCart = () => {
+  const saved = readFromStorage(STORAGE_KEYS.tickets, [])
+  return Array.isArray(saved) ? saved.filter(isValidCartItem) : []
+}
+
 /**
  * Хранит корзину билетов для всего приложения.
  * @param {{ children: import('react').ReactNode }} props
  */
 export function CartProvider({ children }) {
   // корзина переживает перезагрузку страницы: читаем её один раз при создании состояния
-  const [cartItems, setCartItems] = useState(() => readFromStorage(STORAGE_KEYS.tickets, []))
+  const [cartItems, setCartItems] = useState(readCart)
 
   // ДЗ №6 · история оформленных заказов для страницы /profile/orders
   const [orders, setOrders] = useState(() => readFromStorage(STORAGE_KEYS.orders, []))

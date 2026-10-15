@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { fetchHomeData, fetchMovies } from '../api/cinemaApi.js'
 import Container from '../components/Container/Container.jsx'
+import ErrorState from '../components/ErrorState/ErrorState.jsx'
 import HeroSection from '../components/HeroSection/HeroSection.jsx'
 import MovieGrid from '../components/MovieGrid/MovieGrid.jsx'
 import PromoBanner from '../components/PromoBanner/PromoBanner.jsx'
@@ -34,33 +35,42 @@ function HomePage() {
   const [isPromoVisible, setIsPromoVisible] = useState(true)
   const [userReviews, setUserReviews] = useState([])
   const reviewIdRef = useRef(0)
+  const [loadError, setLoadError] = useState(null)
+  const [attempt, setAttempt] = useState(0)
 
-  // ДЗ №4 · #1 — первичная загрузка данных главной при монтировании
+  // ДЗ №4 · #1 — первичная загрузка данных главной при монтировании (и повторная — по кнопке «Повторить»)
   useEffect(() => {
     const controller = new AbortController()
+    const handleError = (error) => {
+      if (error.name === 'AbortError') return
+      setLoadError(error.message)
+      setIsHomeLoading(false)
+      setPopularMovies([])
+    }
 
     fetchHomeData(controller.signal)
       .then((data) => {
         setHomeData(data)
         setIsHomeLoading(false)
       })
-      .catch((error) => {
-        if (error.name === 'AbortError') return
-        console.error(error)
-        setIsHomeLoading(false)
-      })
+      .catch(handleError)
 
     fetchMovies(
       { category: ALL_CATEGORY, query: '', sortBy: 'rating-desc', page: 1, perPage: POPULAR_COUNT },
       controller.signal,
     )
       .then((result) => setPopularMovies(result.items))
-      .catch((error) => {
-        if (error.name !== 'AbortError') setPopularMovies([])
-      })
+      .catch(handleError)
 
     return () => controller.abort()
-  }, [])
+  }, [attempt])
+
+  const retryLoading = () => {
+    setLoadError(null)
+    setIsHomeLoading(true)
+    setPopularMovies(null)
+    setAttempt((prev) => prev + 1)
+  }
 
   const reviews = [...userReviews, ...homeData.testimonials]
 
@@ -104,7 +114,9 @@ function HomePage() {
               Весь каталог →
             </Link>
           </div>
-          {popularMovies === null ? (
+          {loadError ? (
+            <ErrorState message={loadError} onRetry={retryLoading} />
+          ) : popularMovies === null ? (
             <div className="movies-grid">
               {Array.from({ length: SKELETON_COUNT }, (_, index) => (
                 <div key={index} className="skeleton skeleton--card" />
@@ -116,30 +128,32 @@ function HomePage() {
         </Container>
       </section>
 
-      <section className="section">
-        <Container>
-          <SectionHeader
-            title="CineVibe в цифрах"
-            subtitle="Как растёт наш кинотеатр за последний месяц."
-            align="left"
-          />
-          <div className="stats-grid">
-            {isHomeLoading
-              ? Array.from({ length: SKELETON_COUNT }, (_, index) => (
-                  <div key={index} className="skeleton skeleton--stat" />
-                ))
-              : homeData.stats.map((stat) => (
-                  <StatCard
-                    key={stat.id}
-                    title={stat.title}
-                    value={stat.value}
-                    change={stat.change}
-                    isPositive={stat.isPositive}
-                  />
-                ))}
-          </div>
-        </Container>
-      </section>
+      {!loadError && (
+        <section className="section">
+          <Container>
+            <SectionHeader
+              title="CineVibe в цифрах"
+              subtitle="Как растёт наш кинотеатр за последний месяц."
+              align="left"
+            />
+            <div className="stats-grid">
+              {isHomeLoading
+                ? Array.from({ length: SKELETON_COUNT }, (_, index) => (
+                    <div key={index} className="skeleton skeleton--stat" />
+                  ))
+                : homeData.stats.map((stat) => (
+                    <StatCard
+                      key={stat.id}
+                      title={stat.title}
+                      value={stat.value}
+                      change={stat.change}
+                      isPositive={stat.isPositive}
+                    />
+                  ))}
+            </div>
+          </Container>
+        </section>
+      )}
 
       <section className="section">
         <Container maxWidth={1080}>

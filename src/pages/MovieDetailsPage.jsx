@@ -4,6 +4,7 @@ import { fetchMovie } from '../api/cinemaApi.js'
 import Badge from '../components/Badge/Badge.jsx'
 import Button from '../components/Button/Button.jsx'
 import Container from '../components/Container/Container.jsx'
+import ErrorState from '../components/ErrorState/ErrorState.jsx'
 import FavoriteButton from '../components/FavoriteButton/FavoriteButton.jsx'
 import MovieGrid from '../components/MovieGrid/MovieGrid.jsx'
 import QuantitySelector from '../components/QuantitySelector/QuantitySelector.jsx'
@@ -32,26 +33,32 @@ function MovieDetailsPage() {
   const toggleFavorite = useToggleFavorite()
   const { showToast } = useLayout()
 
-  // ответ хранится вместе с id, для которого он получен: пока id не совпадает — идёт загрузка
-  const [result, setResult] = useState({ id: null, movie: null })
-  const isLoading = result.id !== id
+  // ответ хранится вместе с ключом запроса (id + номер попытки): пока ключ не совпадает — идёт загрузка
+  const [attempt, setAttempt] = useState(0)
+  const requestKey = `${id}#${attempt}`
+  const [result, setResult] = useState({ key: null, movie: null, error: null })
+  const isLoading = result.key !== requestKey
   const movie = isLoading ? null : result.movie
+  const loadError = isLoading ? null : result.error
 
   useEffect(() => {
     const controller = new AbortController()
 
     fetchMovie(Number(id), controller.signal)
-      .then((found) => setResult({ id, movie: found }))
+      .then((found) => setResult({ key: requestKey, movie: found, error: null }))
       .catch((error) => {
         if (error.name === 'AbortError') return
-        console.error(error)
-        setResult({ id, movie: null })
+        setResult({ key: requestKey, movie: null, error: error.message })
       })
 
     return () => controller.abort()
-  }, [id])
+  }, [id, requestKey])
 
-  useDocumentTitle(isLoading ? 'Загрузка фильма' : movie ? `${movie.title} — смотреть онлайн` : 'Фильм не найден')
+  let pageTitle = 'Фильм не найден'
+  if (isLoading) pageTitle = 'Загрузка фильма'
+  else if (loadError) pageTitle = 'Ошибка загрузки'
+  else if (movie) pageTitle = `${movie.title} — смотреть онлайн`
+  useDocumentTitle(pageTitle)
 
   const handleAddTickets = (quantity) => {
     addToCart(toTicket(movie), quantity)
@@ -72,6 +79,20 @@ function MovieDetailsPage() {
               <div className="skeleton movie-details__line-skeleton movie-details__line-skeleton--short" />
             </div>
           </div>
+        </Container>
+      </section>
+    )
+  }
+
+  if (loadError) {
+    return (
+      <section className="page">
+        <Container>
+          <ErrorState
+            title="Не удалось загрузить фильм"
+            message={loadError}
+            onRetry={() => setAttempt((prev) => prev + 1)}
+          />
         </Container>
       </section>
     )
