@@ -24,6 +24,15 @@ export const cinemaInfo = {
   hours: 'Онлайн — круглосуточно, зал — с 10:00 до 02:00',
 }
 
+// ДЗ №8 — варианты для формы регистрации (select и radio)
+export const countries = ['Казахстан', 'Кыргызстан', 'Узбекистан', 'Россия', 'Беларусь', 'Другая страна']
+
+export const genders = [
+  { value: 'male', label: 'Мужской' },
+  { value: 'female', label: 'Женский' },
+  { value: 'unspecified', label: 'Не указывать' },
+]
+
 export const currentUser = {
   name: 'Жумагали Адильжан',
   avatarUrl: createAvatar('ЖА', '#e11d48'),

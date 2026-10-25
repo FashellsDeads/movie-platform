@@ -11,7 +11,7 @@ npm run build    # production-сборка
 npm run lint     # проверка кода (oxlint)
 ```
 
-Каждое ДЗ сохранено отдельной версией: `git checkout hw2` … `git checkout hw6`, вернуться — `git checkout main`. Midterm (ДЗ №7) — ветка `mid`: `git checkout mid`.
+Каждое ДЗ сохранено отдельной версией: `git checkout hw2` … `git checkout hw6`, `git checkout midterm`, `git checkout hw8`, вернуться — `git checkout main`. Midterm (ДЗ №7) делался в ветке `mid` и влит в `main`.
 Таблицы ниже описывают код на момент своего ДЗ. С ДЗ №5 содержимое `App.jsx` переехало в `src/pages/HomePage.jsx`, а тема (вместе с эффектами ДЗ №4 #3 и #15) — в `ThemeProvider`.
 С ДЗ №6 сайт стал многостраничным: каталог (поиск, жанры, сортировка, пагинация) переехал с главной на `/movies`, окно фильма заменила страница `/movie/:id`, окна входа и корзины — страницы `/login` и `/tickets`.
 
@@ -163,6 +163,32 @@ Prop drilling, который был в ДЗ №3–4 (`isDarkMode`, `logoSrc`, 
 - **ErrorBoundary** — в DevTools → Application → Local Storage замените `cinevibe:orders` на `[{"id":"x"}]` и откройте «Мои заказы»: вместо белого экрана появится «Что-то пошло не так», шапка и меню продолжат работать.
 - Испорченные записи в `cinevibe:tickets` и `cinevibe:favorites` при загрузке отбрасываются — в шапке не будет `NaN`.
 
+## ДЗ №8 — формы и управляемые компоненты
+
+Страница `/register` ([`pages/RegisterPage.jsx`](src/pages/RegisterPage.jsx)) и форма [`components/RegisterForm/RegisterForm.jsx`](src/components/RegisterForm/RegisterForm.jsx). Сторонних библиотек для форм нет — только `useState`, `onChange`, `onSubmit`, `onClick`, `value`, `checked`, `preventDefault` и условный рендеринг.
+
+| Требование | Где реализовано |
+|---|---|
+| 8 полей разных типов | `name` (text), `email`, `password`, `age` (number), `country` (select), `gender` (radio), жанры (checkbox), `about` (textarea) |
+| Controlled Components | у каждого поля свой `useState`; поле показывает его через `value` (radio и checkbox — `checked`), меняется только через `onChange` |
+| select — одна страна | `<select value={country}>`, список стран в `data/site.js` |
+| radio — один вариант | общий `name="gender"`, `checked={gender === item.value}` |
+| checkbox — несколько вариантов | массив `genres`: отмеченный жанр добавляется, снятый убирается (`handleGenreChange`) |
+| `handleSubmit` + `preventDefault` | валидация всех полей через `validateRegisterForm` из [`utils/validation.js`](src/utils/validation.js) |
+| Правила | имя и email не пустые (email ещё и с доменом), пароль ≥ 6 символов, возраст ≥ 18, страна, пол и хотя бы один жанр выбраны; «О себе» необязательно |
+| `errors` в отдельном state | `useState({})`; ошибка выводится прямо под полем (`FormField`), только если она есть |
+| Исправил поле — ошибка исчезла | `refreshError`: при изменении поле проверяется заново, верное — ошибка убирается |
+| Успех | «Форма успешно отправлена» и блок «Данные пользователя» — только после успешной отправки (пароль показан точками) |
+| `handleReset` | очищает все поля, select, radio, checkbox, textarea, ошибки и сообщение об успехе; вызывается кнопками «Сбросить» (до отправки) и «Очистить форму» (после) |
+| Доп. задание: общий `handleChange` | один обработчик для text, email, password, number, select, radio и textarea — нужное поле определяется по атрибуту `name` |
+
+Что ещё сделано:
+
+- Поле с ошибкой подсвечивается и получает `aria-invalid`, текст ошибки связан с полем через `aria-describedby`; после неудачной отправки фокус переходит на первое неверное поле.
+- Пароль можно показать кнопкой «Показать»; у «О себе» счётчик символов (до 500).
+- После регистрации пользователь сразу входит в аккаунт (`AuthContext`) — в шапке появляется его аватар. Со страницы входа есть ссылка «Зарегистрироваться».
+- «Навыки» из задания в кинотеатре заменены любимыми жанрами: это тот же набор checkbox с выбором нескольких вариантов и правилом «хотя бы один».
+
 ## Структура
 
 ```
@@ -177,7 +203,7 @@ src/
 ├── pages/          # страницы маршрутов; profile/ — личный кабинет с вложенными вкладками
 ├── routes/         # ProtectedRoute
 ├── styles/         # index.css — дизайн-токены и базовые стили; shared.css — общие стили страниц
-├── utils/          # форматирование, поиск и сортировка, localStorage, генерация постеров и аватаров
+├── utils/          # форматирование, поиск и сортировка, localStorage, правила проверки форм, постеры и аватары
 ├── App.jsx         # провайдеры контекстов и карта маршрутов
 └── main.jsx        # BrowserRouter, подключение глобальных стилей
 public/

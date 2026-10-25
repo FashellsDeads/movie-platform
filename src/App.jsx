@@ -11,6 +11,7 @@ import HomePage from './pages/HomePage.jsx'
 import LoginPage from './pages/LoginPage.jsx'
 import MovieDetailsPage from './pages/MovieDetailsPage.jsx'
 import NotFoundPage from './pages/NotFoundPage.jsx'
+import RegisterPage from './pages/RegisterPage.jsx'
 import TicketsPage from './pages/TicketsPage.jsx'
 import ProfileLayout from './pages/profile/ProfileLayout.jsx'
 import ProfileOrders from './pages/profile/ProfileOrders.jsx'
@@ -39,6 +40,7 @@ function App() {
                 <Route path="tickets" element={<TicketsPage />} />
                 <Route path="about" element={<AboutPage />} />
                 <Route path="login" element={<LoginPage />} />
+                <Route path="register" element={<RegisterPage />} />
 
                 <Route element={<ProtectedRoute />}>
                   <Route path="profile" element={<ProfileLayout />}>

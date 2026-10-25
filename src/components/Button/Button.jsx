@@ -5,6 +5,7 @@ import './Button.css'
  * @property {string} text — надпись на кнопке
  * @property {'primary' | 'secondary' | 'outline'} [variant='primary'] — визуальный стиль
  * @property {boolean} [isDisabled=false] — заблокирована ли кнопка
+ * @property {'button' | 'submit'} [type='button'] — submit отправляет форму, внутри которой стоит кнопка
  * @property {() => void} [onClick] — обработчик нажатия
  */
 
@@ -12,10 +13,10 @@ import './Button.css'
  * Универсальная кнопка сайта.
  * @param {ButtonProps} props
  */
-function Button({ text, variant = 'primary', isDisabled = false, onClick }) {
+function Button({ text, variant = 'primary', isDisabled = false, type = 'button', onClick }) {
   return (
     <button
-      type="button"
+      type={type}
       className={`button button--${variant}`}
       disabled={isDisabled}
       onClick={onClick}

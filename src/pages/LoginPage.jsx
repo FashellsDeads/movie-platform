@@ -1,14 +1,14 @@
 import { useState } from 'react'
-import { Navigate, useLocation, useNavigate } from 'react-router-dom'
+import { Link, Navigate, useLocation, useNavigate } from 'react-router-dom'
 import Container from '../components/Container/Container.jsx'
 import { useAuth } from '../context/auth/useAuth.js'
 import { currentUser } from '../data/site.js'
 import { useDocumentTitle } from '../hooks/useDocumentTitle.js'
 import { createAvatar, getInitials } from '../utils/placeholders.js'
+import { EMAIL_PATTERN } from '../utils/validation.js'
 import './LoginPage.css'
 
 const AVATAR_COLOR = '#e11d48'
-const EMAIL_PATTERN = /^\S+@\S+\.\S+$/
 const DEFAULT_REDIRECT = '/profile'
 
 /**
@@ -98,6 +98,12 @@ function LoginPage() {
               Войти
             </button>
             <p className="login-form__note">Демо-вход: пароль не нужен, сессия хранится только в этом браузере.</p>
+            <p className="login-form__note">
+              Нет аккаунта?{' '}
+              <Link className="text-link" to="/register">
+                Зарегистрироваться
+              </Link>
+            </p>
           </form>
         </div>
       </Container>

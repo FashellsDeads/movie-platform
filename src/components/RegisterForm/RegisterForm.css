@@ -1,0 +1,110 @@
+.register {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.register-form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+/* Короткие поля — в две колонки, на телефоне — в одну */
+.register-form__grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(260px, 100%), 1fr));
+  gap: 20px;
+}
+
+.register-form__password {
+  position: relative;
+}
+
+.register-form__password .form-control {
+  padding-right: 96px;
+}
+
+.register-form__reveal {
+  position: absolute;
+  top: 50%;
+  right: 6px;
+  transform: translateY(-50%);
+  padding: 6px 12px;
+  border: 0;
+  border-radius: 999px;
+  font: inherit;
+  font-size: 0.8125rem;
+  font-weight: 700;
+  color: var(--color-accent);
+  background: transparent;
+  cursor: pointer;
+}
+
+.register-form__reveal:hover {
+  background: var(--color-surface-hover);
+}
+
+.register-form__reveal:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 1px;
+}
+
+.register-form__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+/* Результат отправки */
+.register-result {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 16px;
+}
+
+.register-result__success {
+  align-self: stretch;
+  margin: 0;
+  padding: 14px 18px;
+  border-radius: var(--radius-md);
+  font-weight: 700;
+  color: var(--color-text);
+  background: color-mix(in srgb, var(--color-success) 16%, transparent);
+}
+
+.register-result__card {
+  align-self: stretch;
+  padding: 20px 22px;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  background: var(--color-surface-raised);
+}
+
+.register-result__title {
+  margin: 0 0 14px;
+  font-size: 1.125rem;
+  font-weight: 800;
+  color: var(--color-text);
+}
+
+.register-result__list {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(220px, 100%), 1fr));
+  gap: 14px 24px;
+  margin: 0;
+}
+
+.register-result__list dt {
+  margin-bottom: 2px;
+  font-size: 0.8125rem;
+  font-weight: 700;
+  color: var(--color-muted);
+}
+
+.register-result__list dd {
+  margin: 0;
+  color: var(--color-text);
+  overflow-wrap: anywhere;
+}
