@@ -5,6 +5,7 @@ import { FavoritesProvider } from './context/favorites/FavoritesProvider.jsx'
 import { ThemeProvider } from './context/theme/ThemeProvider.jsx'
 import MainLayout from './layouts/MainLayout.jsx'
 import AboutPage from './pages/AboutPage.jsx'
+import BarPage from './pages/BarPage.jsx'
 import CatalogPage from './pages/CatalogPage.jsx'
 import FavoritesPage from './pages/FavoritesPage.jsx'
 import HomePage from './pages/HomePage.jsx'
@@ -38,6 +39,7 @@ function App() {
                 <Route path="movie/:id" element={<MovieDetailsPage />} />
                 <Route path="favorites" element={<FavoritesPage />} />
                 <Route path="tickets" element={<TicketsPage />} />
+                <Route path="bar" element={<BarPage />} />
                 <Route path="about" element={<AboutPage />} />
                 <Route path="login" element={<LoginPage />} />
                 <Route path="register" element={<RegisterPage />} />

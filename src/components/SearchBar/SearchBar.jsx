@@ -5,13 +5,14 @@ import './SearchBar.css'
  * @property {string} value — текущий поисковый запрос
  * @property {(value: string) => void} onChange — изменение запроса
  * @property {string} [placeholder] — подсказка в поле
+ * @property {string} [label='Поиск фильмов'] — подпись для экранных читалок
  */
 
 /**
- * Контролируемое поле поиска фильмов по названию.
+ * Контролируемое поле поиска по названию (фильмы в каталоге, товары в кинобаре).
  * @param {SearchBarProps} props
  */
-function SearchBar({ value, onChange, placeholder = 'Поиск по названию…' }) {
+function SearchBar({ value, onChange, placeholder = 'Поиск по названию…', label = 'Поиск фильмов' }) {
   return (
     <div className="search-bar">
       <svg className="search-bar__icon" viewBox="0 0 24 24" width="18" height="18" aria-hidden="true">
@@ -22,7 +23,7 @@ function SearchBar({ value, onChange, placeholder = 'Поиск по назва�
         type="search"
         value={value}
         placeholder={placeholder}
-        aria-label="Поиск фильмов"
+        aria-label={label}
         onChange={(event) => onChange(event.target.value)}
       />
       {value && (

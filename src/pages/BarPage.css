@@ -1,0 +1,109 @@
+/* Переключатели для проверки ДЗ №9 */
+.bar-lab {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px 20px;
+  margin-bottom: 20px;
+  padding: 14px 18px;
+  border: 1px dashed var(--color-border-strong);
+  border-radius: var(--radius-md);
+}
+
+.bar-lab__title {
+  margin: 0;
+  font-size: 0.875rem;
+  font-weight: 800;
+  color: var(--color-text);
+}
+
+.bar-lab__switch {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--color-text);
+  cursor: pointer;
+}
+
+.bar-lab__switch input {
+  width: 16px;
+  height: 16px;
+  margin: 0;
+  accent-color: var(--color-accent);
+  cursor: pointer;
+}
+
+.bar-lab__hint {
+  flex-basis: 100%;
+  margin: 0;
+  font-size: 0.8125rem;
+  color: var(--color-muted);
+}
+
+.bar-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px 16px;
+  margin-bottom: 20px;
+}
+
+.bar-toolbar .search-bar {
+  flex: 1 1 280px;
+}
+
+.bar-summary {
+  display: grid;
+  /* две панели в ряд на компьютере, одна под другой на телефоне */
+  grid-template-columns: repeat(auto-fit, minmax(min(420px, 100%), 1fr));
+  gap: 14px;
+  margin-bottom: 24px;
+}
+
+.bar-summary .product-stats {
+  grid-column: 1 / -1;
+}
+
+.bar-panel {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 16px 18px;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  background: var(--color-surface);
+}
+
+.bar-panel__title {
+  margin: 0;
+  font-weight: 800;
+  color: var(--color-text);
+}
+
+.bar-panel__text {
+  margin: 0;
+  font-size: 0.9375rem;
+  color: var(--color-muted);
+}
+
+.bar-panel__text strong {
+  color: var(--color-text);
+}
+
+.bar-panel__total {
+  margin: 0;
+  font-size: 1.25rem;
+  font-weight: 800;
+  color: var(--color-text);
+}
+
+.bar-panel__clear {
+  align-self: flex-start;
+  padding: 0;
+  border: 0;
+  font: inherit;
+  font-size: 0.875rem;
+  background: none;
+  cursor: pointer;
+}
