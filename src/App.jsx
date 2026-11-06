@@ -14,6 +14,8 @@ import MovieDetailsPage from './pages/MovieDetailsPage.jsx'
 import NotFoundPage from './pages/NotFoundPage.jsx'
 import RegisterPage from './pages/RegisterPage.jsx'
 import TicketsPage from './pages/TicketsPage.jsx'
+import UserDetailsPage from './pages/UserDetailsPage.jsx'
+import UsersPage from './pages/UsersPage.jsx'
 import ProfileLayout from './pages/profile/ProfileLayout.jsx'
 import ProfileOrders from './pages/profile/ProfileOrders.jsx'
 import ProfileOverview from './pages/profile/ProfileOverview.jsx'
@@ -40,6 +42,8 @@ function App() {
                 <Route path="favorites" element={<FavoritesPage />} />
                 <Route path="tickets" element={<TicketsPage />} />
                 <Route path="bar" element={<BarPage />} />
+                <Route path="users" element={<UsersPage />} />
+                <Route path="users/:id" element={<UserDetailsPage />} />
                 <Route path="about" element={<AboutPage />} />
                 <Route path="login" element={<LoginPage />} />
                 <Route path="register" element={<RegisterPage />} />

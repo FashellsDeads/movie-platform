@@ -6,13 +6,20 @@ import './SearchBar.css'
  * @property {(value: string) => void} onChange — изменение запроса
  * @property {string} [placeholder] — подсказка в поле
  * @property {string} [label='Поиск фильмов'] — подпись для экранных читалок
+ * @property {boolean} [hasClearButton=true] — показывать ли крестик очистки в поле
  */
 
 /**
  * Контролируемое поле поиска по названию (фильмы в каталоге, товары в кинобаре).
  * @param {SearchBarProps} props
  */
-function SearchBar({ value, onChange, placeholder = 'Поиск по названию…', label = 'Поиск фильмов' }) {
+function SearchBar({
+  value,
+  onChange,
+  placeholder = 'Поиск по названию…',
+  label = 'Поиск фильмов',
+  hasClearButton = true,
+}) {
   return (
     <div className="search-bar">
       <svg className="search-bar__icon" viewBox="0 0 24 24" width="18" height="18" aria-hidden="true">
@@ -26,7 +33,7 @@ function SearchBar({ value, onChange, placeholder = 'Поиск по назва�
         aria-label={label}
         onChange={(event) => onChange(event.target.value)}
       />
-      {value && (
+      {hasClearButton && value && (
         <button type="button" className="search-bar__clear" aria-label="Очистить поиск" onClick={() => onChange('')}>
           ×
         </button>

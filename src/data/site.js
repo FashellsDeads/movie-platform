@@ -8,6 +8,7 @@ export const navItems = [
   { id: 'movies', label: 'Фильмы', link: '/movies' },
   { id: 'favorites', label: 'Избранное', link: '/favorites' },
   { id: 'bar', label: 'Кинобар', link: '/bar' },
+  { id: 'users', label: 'Пользователи', link: '/users' },
   { id: 'about', label: 'О кинотеатре', link: '/about' },
 ]
 

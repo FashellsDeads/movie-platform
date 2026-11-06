@@ -146,7 +146,7 @@ a.user-profile__menu-action {
 }
 
 /* На средних экранах в шапке остаётся только аватар, подробности — в меню */
-@media (max-width: 1200px) {
+@media (max-width: 1439px) {
   .user-profile__info,
   .user-profile__chevron {
     display: none;

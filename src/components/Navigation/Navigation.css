@@ -1,6 +1,6 @@
 .navigation__list {
   display: flex;
-  gap: 4px;
+  gap: 2px;
   margin: 0;
   padding: 0;
   list-style: none;
@@ -8,7 +8,7 @@
 
 .navigation__link {
   display: block;
-  padding: 8px 14px;
+  padding: 8px 10px;
   border-radius: 999px;
   font-size: 0.9375rem;
   font-weight: 600;

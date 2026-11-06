@@ -89,7 +89,7 @@ function Header({ navItems, favoritesCount, onPremiumClick }) {
 
   return (
     <header className="header">
-      <Container maxWidth={1320}>
+      <Container maxWidth={1560}>
         <div className="header__inner">
           <Logo src={logoSrc} altText="CineVibe" width={isMobile ? 120 : 150} height={isMobile ? 29 : 36} />
 
