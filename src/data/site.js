@@ -16,6 +16,7 @@ export const footerLinks = [
   { id: 'movies', label: 'Каталог фильмов', link: '/movies' },
   { id: 'tickets', label: 'Мои билеты', link: '/tickets' },
   { id: 'profile', label: 'Личный кабинет', link: '/profile' },
+  { id: 'tasks', label: 'Задачи', link: '/tasks' },
   { id: 'about', label: 'О кинотеатре', link: '/about' },
 ]
 

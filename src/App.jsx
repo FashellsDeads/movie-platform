@@ -13,6 +13,7 @@ import LoginPage from './pages/LoginPage.jsx'
 import MovieDetailsPage from './pages/MovieDetailsPage.jsx'
 import NotFoundPage from './pages/NotFoundPage.jsx'
 import RegisterPage from './pages/RegisterPage.jsx'
+import TasksPage from './pages/TasksPage.jsx'
 import TicketsPage from './pages/TicketsPage.jsx'
 import UserDetailsPage from './pages/UserDetailsPage.jsx'
 import UsersPage from './pages/UsersPage.jsx'
@@ -42,6 +43,7 @@ function App() {
                 <Route path="favorites" element={<FavoritesPage />} />
                 <Route path="tickets" element={<TicketsPage />} />
                 <Route path="bar" element={<BarPage />} />
+                <Route path="tasks" element={<TasksPage />} />
                 <Route path="users" element={<UsersPage />} />
                 <Route path="users/:id" element={<UserDetailsPage />} />
                 <Route path="about" element={<AboutPage />} />

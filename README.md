@@ -9,9 +9,10 @@ npm install
 npm run dev      # режим разработки
 npm run build    # production-сборка
 npm run lint     # проверка кода (oxlint)
+npm test         # автотесты (Vitest и React Testing Library)
 ```
 
-Каждое ДЗ сохранено отдельной версией: `git checkout hw2` … `git checkout hw6`, `git checkout midterm`, `git checkout hw8`, `git checkout hw9`, `git checkout hw10`, вернуться — `git checkout main`. Midterm (ДЗ №7) делался в ветке `mid` и влит в `main`.
+Каждое ДЗ сохранено отдельной версией: `git checkout hw2` … `git checkout hw6`, `git checkout midterm`, `git checkout hw8`, `git checkout hw9`, `git checkout hw10`, `git checkout hw11`, вернуться — `git checkout main`. Midterm (ДЗ №7) делался в ветке `mid` и влит в `main`.
 Таблицы ниже описывают код на момент своего ДЗ. С ДЗ №5 содержимое `App.jsx` переехало в `src/pages/HomePage.jsx`, а тема (вместе с эффектами ДЗ №4 #3 и #15) — в `ThemeProvider`.
 С ДЗ №6 сайт стал многостраничным: каталог (поиск, жанры, сортировка, пагинация) переехал с главной на `/movies`, окно фильма заменила страница `/movie/:id`, окна входа и корзины — страницы `/login` и `/tickets`.
 
@@ -264,6 +265,38 @@ Prop drilling, который был в ДЗ №3–4 (`isDarkMode`, `logoSrc`, 
 
 Как проверить: `/users`, ввести `clem` — список обновится через полсекунды, а в Network не будет новых запросов. Ошибку показывает DevTools → Network → Offline и «Повторить запрос».
 
+## ДЗ №11 — тестирование React-приложения
+
+Task Manager — страница `/tasks` (ссылка «Задачи» в подвале сайта). Тесты написаны на Vitest и React Testing Library и проверяют поведение глазами пользователя: что он видит, что происходит после ввода и клика. Настоящий API в тестах не вызывается: `fetch` подменён.
+
+```bash
+npm test             # запустить все тесты один раз
+npm run test:watch   # перезапускать при изменении файлов
+```
+
+**40 тестов в 8 файлах (по заданию нужно минимум 15).**
+
+| Файл | Тестов | Что проверяет |
+|---|---|---|
+| `components/TaskForm/TaskForm.test.jsx` | 8 | Поле и кнопка «Добавить» на странице; задача появляется в списке (клик и Enter); пустую задачу и задачу из пробелов добавить нельзя; ошибка исчезает при вводе; поле очищается |
+| `components/TaskItem/TaskItem.test.jsx` | 5 | Название на странице; «Удалить» убирает задачу, и только свою; чекбокс ставит и снимает отметку; клик по названию тоже отмечает |
+| `components/TaskFilter/TaskFilter.test.jsx` | 5 | Три задачи, одна выполнена: All, Active, Completed; задача уходит из Active после отметки; пустой фильтр при непустом списке |
+| `pages/TasksPage.test.jsx` | 3 | «Задач пока нет»; полный сценарий с задачей Learn React Testing (доп. задание); страница открывается внутри всего сайта по адресу `/tasks` |
+| `pages/UsersPage.test.jsx` | 10 | Loading, Success, Error (нет сети и ответ 500); поиск без нового запроса и с паузой; «Пользователи не найдены»; «Очистить поиск»; фильтр по компании; «Повторить запрос» после ошибки и после успеха |
+| `pages/UserDetailsPage.test.jsx` | 3 | `id` из адреса попадает в запросы пользователя и постов; ошибка 404; кнопка «Назад» |
+| `hooks/useFetch.test.js` | 4 | Данные, ответ 404, `refetch`, отмена старого запроса при смене адреса |
+| `hooks/useDebounce.test.js` | 2 | Значение меняется только через 500 мс; новая буква запускает отсчёт заново |
+
+| Требование | Где реализовано |
+|---|---|
+| Компоненты `TaskForm`, `TaskList`, `TaskItem`, `TaskFilter` | `components/`, состояние хранит `pages/TasksPage.jsx` — в этом проекте он играет роль `App.jsx` из задания |
+| Настройка Vitest | Секция `test` в `vite.config.js` (среда jsdom), скрипты `test` и `test:watch` в `package.json`, `src/test/setup.js` |
+| `screen.getByRole`, `getByText`, `getByPlaceholderText` | Во всех тестах компонентов и страниц |
+| `userEvent`: `await user.type(...)`, `await user.click(...)` | Во всех сценариях; ещё `user.selectOptions` для фильтра по компании |
+| Мокирование API | `src/test/mockUsers.js`: `vi.stubGlobal('fetch', …)`, тестовые пользователи и ответы сервера |
+
+**Как проверить, что тесты настоящие.** Приложение по очереди ломали в 18 местах: убирали проверку пустой задачи, отключали `refetch`, убирали задержку поиска и так далее. Каждую поломку заметил хотя бы один тест.
+
 ## Структура
 
 ```
@@ -277,6 +310,7 @@ src/
 ├── layouts/        # MainLayout — шапка, <Outlet />, подвал, окно Premium, тосты
 ├── pages/          # страницы маршрутов; profile/ — личный кабинет с вложенными вкладками
 ├── routes/         # ProtectedRoute
+├── test/           # настройка тестов и подмена API; сами тесты лежат рядом с кодом (*.test.jsx)
 ├── styles/         # index.css — дизайн-токены и базовые стили; shared.css — общие стили страниц
 ├── utils/          # форматирование, поиск и сортировка (фильмы, кинобар, пользователи), localStorage, правила проверки форм, постеры и аватары
 ├── App.jsx         # провайдеры контекстов и карта маршрутов
