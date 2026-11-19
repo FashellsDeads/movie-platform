@@ -21,7 +21,10 @@ export const footerLinks = [
 ]
 
 // Учебные страницы с компонентами — отдельная колонка в подвале, не в главном меню
-export const devLinks = [{ id: 'patterns', label: 'UI-паттерны', link: '/patterns' }]
+export const devLinks = [
+  { id: 'patterns', label: 'UI-паттерны', link: '/patterns' },
+  { id: 'form-builder', label: 'Конструктор форм', link: '/form-builder' },
+]
 
 export const cinemaInfo = {
   address: 'Алматы, пр. Абая, 52 — зал CineVibe Hall',

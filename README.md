@@ -315,6 +315,33 @@ npm run test:watch   # перезапускать при изменении фа
 
 Тесты лежат рядом с компонентами. Они проверяют: переключение вкладок, показ и скрытие в `Toggle`, оба режима `Accordion`, состояния `DataLoader` (загрузка, ошибка, повторная загрузка), что `withLoading` передаёт props и не передаёт `isLoading`, `children` и `disabled` у `Button`, `Modal` без заголовка, а также страницу целиком внутри сайта.
 
+## ДЗ №13 — продвинутые паттерны компонентов, часть 2
+
+Страница `/form-builder` («Конструктор форм», ссылка в подвале в колонке «Для разработчиков»). На ней собирается анкета зрителя для закрытого показа: имя, email, количество гостей и город.
+
+| Тема из задания | Где в проекте |
+|---|---|
+| Controlled и Uncontrolled в одном компоненте | `components/Input/`. Передан `value` — управляет родитель, и `onChange` получает строку (`onChange={setName}`). Передан `defaultValue` — значение живёт в DOM. На странице показаны оба варианта |
+| `forwardRef` | `components/SearchInput/`. Родитель получает настоящий `<input>`, кнопка «Focus search» ставит в него фокус |
+| `useImperativeHandle` | `components/CustomInput/`. Через `ref` доступны только `focus()`, `clear()` и `getValue()`; кнопки Focus, Clear и Get value, значение выводится на страницу |
+| Provider Pattern, Context | `components/FormProvider/`. `FormProvider` отдаёт значения, ошибки и функции изменения, добавления, удаления и сброса; `useForm()` даёт к ним доступ без prop drilling |
+| `useReducer` и Reducer Pattern | `formReducer.js`, действия `ADD_FIELD`, `REMOVE_FIELD`, `UPDATE_FIELD`, `UPDATE_VALUE`, `RESET_FORM`, `SET_ERRORS`. Состояние меняется только через `dispatch()` |
+| State Reducer Pattern | `<FormProvider reducer={customReducer}>`: внешний reducer получает стандартный третьим аргументом. На странице переключатель «Ограничить 6 полями» подключает reducer, который не даёт добавить седьмое поле |
+| Dynamic Components | `components/DynamicField/` сам выбирает элемент по типу поля: текст, email, число, список (а также пароль, чекбокс и переключатель — пригодятся в формах сайта) |
+| Dynamic Forms | `components/FormBuilder/` и `components/FieldEditor/`: «Добавить поле», название, тип, «Обязательное», удаление |
+| Separation of Concerns, режимы Edit / Preview | `FormBuilder` редактирует структуру, `components/FormPreview/` показывает форму пользователю. В Edit справа живьём видна структура формы (JSON) |
+| Валидация | `utils/formValidation.js`: обязательное поле, корректный email, число. Submit в Preview показывает объект всех значений |
+| Undo / Redo (дополнительное задание) | `withHistory` в `formReducer.js`: история `past / present / future`, действия `UNDO` и `REDO`. В историю попадают только изменения структуры, а ввод значений нет, иначе Undo откатывал бы по одной букве |
+
+Числовое поле в форме — текстовое с цифровой клавиатурой (`inputMode="decimal"`). У `<input type="number">` браузер вместо «2x» отдаёт пустую строку, и проверка «должно быть число» никогда бы не сработала. Дробь можно писать и через точку, и через запятую (`1,5`): на казахстанской и русской раскладке телефона десятичный разделитель — запятая. Undo и Redo откатывают только структуру формы: то, что уже введено в оставшиеся поля, не стирается.
+
+Тесты проверяют:
+- **reducer:** каждое действие, сценарий из задания add → change → delete → undo → undo → redo, Undo после сброса;
+- **поля ввода:** оба режима `Input`, фокус через `forwardRef`, три метода `CustomInput`;
+- **DynamicField:** выбор элемента для каждого типа;
+- **FormProvider:** переопределение действия через `customReducer`;
+- **страница целиком:** конструктор, Preview с ошибками и Submit, Undo/Redo, лимит полей.
+
 ## Структура
 
 ```

@@ -1,0 +1,37 @@
+.dynamic-field__required {
+  margin-left: 4px;
+  color: var(--color-danger);
+}
+
+.dynamic-field__choice-wrap {
+  display: grid;
+  gap: 6px;
+}
+
+.dynamic-field__choice {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  color: var(--color-text);
+  cursor: pointer;
+}
+
+.dynamic-field__choice input {
+  width: 18px;
+  height: 18px;
+  accent-color: var(--color-accent);
+}
+
+.dynamic-field__group {
+  display: grid;
+  gap: 8px;
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+
+.dynamic-field__options {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 20px;
+}

@@ -8,6 +8,7 @@ import AboutPage from './pages/AboutPage.jsx'
 import BarPage from './pages/BarPage.jsx'
 import CatalogPage from './pages/CatalogPage.jsx'
 import FavoritesPage from './pages/FavoritesPage.jsx'
+import FormBuilderPage from './pages/FormBuilderPage.jsx'
 import HomePage from './pages/HomePage.jsx'
 import LoginPage from './pages/LoginPage.jsx'
 import MovieDetailsPage from './pages/MovieDetailsPage.jsx'
@@ -49,6 +50,7 @@ function App() {
                 <Route path="users/:id" element={<UserDetailsPage />} />
                 <Route path="about" element={<AboutPage />} />
                 <Route path="patterns" element={<PatternsPage />} />
+                <Route path="form-builder" element={<FormBuilderPage />} />
                 <Route path="login" element={<LoginPage />} />
                 <Route path="register" element={<RegisterPage />} />
 
