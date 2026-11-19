@@ -1,0 +1,17 @@
+.products-page__title {
+  margin: 0 0 8px;
+  font-size: clamp(1.75rem, 4vw, 2.5rem);
+  font-weight: 800;
+  color: var(--color-text);
+}
+
+.products-page__subtitle {
+  margin: 0;
+  color: var(--color-muted);
+}
+
+.products-page__count {
+  margin: 0 0 16px;
+  color: var(--color-muted);
+  font-size: 0.875rem;
+}

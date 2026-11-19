@@ -1,0 +1,20 @@
+.promo-code__row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  gap: 10px;
+}
+
+.promo-code__row .ui-input {
+  flex: 1 1 200px;
+}
+
+.promo-code__message {
+  margin: 10px 0 0;
+  color: var(--color-danger);
+  font-weight: 700;
+}
+
+.promo-code__message--ok {
+  color: var(--color-success);
+}

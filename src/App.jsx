@@ -1,34 +1,12 @@
-import { Navigate, Route, Routes } from 'react-router-dom'
-import { AuthProvider } from './context/auth/AuthProvider.jsx'
-import { CartProvider } from './context/cart/CartProvider.jsx'
-import { FavoritesProvider } from './context/favorites/FavoritesProvider.jsx'
-import { ThemeProvider } from './context/theme/ThemeProvider.jsx'
-import MainLayout from './layouts/MainLayout.jsx'
-import AboutPage from './pages/AboutPage.jsx'
-import BarPage from './pages/BarPage.jsx'
-import CatalogPage from './pages/CatalogPage.jsx'
-import FavoritesPage from './pages/FavoritesPage.jsx'
-import FormBuilderPage from './pages/FormBuilderPage.jsx'
-import HomePage from './pages/HomePage.jsx'
-import LoginPage from './pages/LoginPage.jsx'
-import MovieDetailsPage from './pages/MovieDetailsPage.jsx'
-import NotFoundPage from './pages/NotFoundPage.jsx'
-import PatternsPage from './pages/PatternsPage.jsx'
-import RegisterPage from './pages/RegisterPage.jsx'
-import TasksPage from './pages/TasksPage.jsx'
-import TicketsPage from './pages/TicketsPage.jsx'
-import UserDetailsPage from './pages/UserDetailsPage.jsx'
-import UsersPage from './pages/UsersPage.jsx'
-import ProfileLayout from './pages/profile/ProfileLayout.jsx'
-import ProfileOrders from './pages/profile/ProfileOrders.jsx'
-import ProfileOverview from './pages/profile/ProfileOverview.jsx'
-import ProfileSettings from './pages/profile/ProfileSettings.jsx'
-import ProtectedRoute from './routes/ProtectedRoute.jsx'
+import { AuthProvider } from './context/AuthContext.jsx'
+import { CartProvider } from './context/CartContext.jsx'
+import { FavoritesProvider } from './context/FavoritesContext.jsx'
+import { ThemeProvider } from './context/ThemeContext.jsx'
+import AppRoutes from './routes/AppRoutes.jsx'
 
 /**
- * Корень приложения: глобальные провайдеры (ДЗ №5) и карта маршрутов (ДЗ №6).
- * MainLayout — общий макет (шапка, подвал, модалка Premium, тосты), страницы
- * подставляются в его <Outlet />. Личный кабинет закрыт ProtectedRoute.
+ * Корень приложения: глобальное состояние (тема, вход, корзина, избранное)
+ * и карта маршрутов. BrowserRouter подключён в main.jsx.
  */
 function App() {
   return (
@@ -36,38 +14,7 @@ function App() {
       <AuthProvider>
         <CartProvider>
           <FavoritesProvider>
-            {/* ДЗ №6 · #1 — реестр маршрутов; BrowserRouter подключён в main.jsx */}
-            <Routes>
-              <Route element={<MainLayout />}>
-                <Route index element={<HomePage />} />
-                <Route path="movies" element={<CatalogPage />} />
-                <Route path="movie/:id" element={<MovieDetailsPage />} />
-                <Route path="favorites" element={<FavoritesPage />} />
-                <Route path="tickets" element={<TicketsPage />} />
-                <Route path="bar" element={<BarPage />} />
-                <Route path="tasks" element={<TasksPage />} />
-                <Route path="users" element={<UsersPage />} />
-                <Route path="users/:id" element={<UserDetailsPage />} />
-                <Route path="about" element={<AboutPage />} />
-                <Route path="patterns" element={<PatternsPage />} />
-                <Route path="form-builder" element={<FormBuilderPage />} />
-                <Route path="login" element={<LoginPage />} />
-                <Route path="register" element={<RegisterPage />} />
-
-                <Route element={<ProtectedRoute />}>
-                  <Route path="profile" element={<ProfileLayout />}>
-                    <Route index element={<ProfileOverview />} />
-                    <Route path="orders" element={<ProfileOrders />} />
-                    <Route path="settings" element={<ProfileSettings />} />
-                  </Route>
-                </Route>
-
-                {/* старый адрес каталога — перенаправляем без записи в историю */}
-                <Route path="catalog" element={<Navigate to="/movies" replace />} />
-                {/* ДЗ №6 · #2 — любой неизвестный адрес, последним в списке */}
-                <Route path="*" element={<NotFoundPage />} />
-              </Route>
-            </Routes>
+            <AppRoutes />
           </FavoritesProvider>
         </CartProvider>
       </AuthProvider>

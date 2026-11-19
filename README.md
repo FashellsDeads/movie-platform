@@ -1,365 +1,107 @@
-# CineVibe — онлайн-кинотеатр
+# CineVibe — магазин кинотеатра
 
-Семестровый проект по React (Vite + JavaScript). Тема: **Киносайт / Онлайн-кинотеатр**.
+Учебный проект по React: сайт кинотеатра в Алматы. Билеты на сеансы и товары кинобара (попкорн, напитки, комбо, мерч) лежат в одном каталоге, оформляются одной корзиной и попадают в историю заказов в личном кабинете.
+
+React 19 · Vite · React Router 7 · Context + useReducer · Vitest + React Testing Library · oxlint. Сторонних UI-библиотек нет.
 
 ## Запуск
 
 ```bash
 npm install
-npm run dev      # режим разработки
+npm run dev      # режим разработки, http://localhost:5173
 npm run build    # production-сборка
+npm run preview  # посмотреть сборку
 npm run lint     # проверка кода (oxlint)
-npm test         # автотесты (Vitest и React Testing Library)
+npm test         # автотесты: 174 теста в 27 файлах
+npm run api      # пересобрать JSON каталога в public/api/ из scripts/products.mjs
 ```
 
-Каждое ДЗ сохранено отдельной версией: `git checkout hw2` … `git checkout hw6`, `git checkout midterm`, `git checkout hw8`, `git checkout hw9`, `git checkout hw10`, `git checkout hw11`, вернуться — `git checkout main`. Midterm (ДЗ №7) делался в ветке `mid` и влит в `main`.
-Таблицы ниже описывают код на момент своего ДЗ. С ДЗ №5 содержимое `App.jsx` переехало в `src/pages/HomePage.jsx`, а тема (вместе с эффектами ДЗ №4 #3 и #15) — в `ThemeProvider`.
-С ДЗ №6 сайт стал многостраничным: каталог (поиск, жанры, сортировка, пагинация) переехал с главной на `/movies`, окно фильма заменила страница `/movie/:id`, окна входа и корзины — страницы `/login` и `/tickets`.
+**Демо-аккаунт для входа:** `adilzhan@cinevibe.kz` / `cinevibe`. Можно и зарегистрироваться: аккаунт сохранится в этом браузере.
 
-## ДЗ №2 — передача данных через props
+## Что умеет сайт
 
-Интерфейсы props описаны в каждом компоненте через JSDoc (`@typedef`), значения по умолчанию задаются при деструктуризации.
-
-| # | Компонент | Props | Где используется |
-|---|---|---|---|
-| 1 | `Button` | `text`, `variant`, `isDisabled`, `onClick` | Header (secondary), Hero и карточки (primary), карточка «Скоро» (outline + disabled), модальные окна |
-| 2 | `Logo` | `src`, `altText`, `width`, `height` | Header и Footer (разные размеры) |
-| 3 | `Card` | `title`, `description`, `imageUrl`, `year`, `genre`, `duration`, `score`, `reviewsCount`, `status`, `isAvailable`, `onWatch` | Каталог: 9 фильмов |
-| 4 | `Badge` | `label`, `colorScheme` | Статус в карточке и в окне фильма: «Новинка» (green), «Хит»/«Скоро» (yellow), «18+» (red) |
-| 5 | `Navigation` | `navItems[]` (`id`, `label`, `link`) | Получает пункты из Header, рендерит их через `.map()` |
-| 6 | `UserProfile` | `user` (`name`, `avatarUrl`, `role`, `email`) | Шапка сайта |
-| 7 | `HeroSection` | `heading`, `subheading`, `buttonText`, `onButtonClick` | Главный экран |
-| 8 | `StatCard` | `title`, `value`, `change`, `isPositive` | Блок «CineVibe в цифрах», 4 виджета |
-| 9 | `RatingStars` | `score`, `reviewsCount` | Внутри карточки и окна фильма |
-| 10 | `SectionHeader` | `title`, `subtitle`, `align` | Перед статистикой и каталогом (left), перед отзывами (center) |
-| 11 | `CategoryFilter` | `categories[]`, `activeCategory`, `onSelect` | Фильтр жанров над каталогом, активный жанр подсвечен классом `--active` |
-| 12 | `TestimonialCard` | `authorName`, `authorRole`, `avatar`, `text`, `date` | Блок отзывов зрителей |
-| 13 | `Modal` | `isOpen`, `title`, `onClose`, `children` | Окно просмотра фильма и окно подписки Premium; при `isOpen === false` возвращает `null` |
-| 14 | `Container` | `children`, `maxWidth` | Оборачивает все секции (1200 / 1080 / 1320 px) |
-| 15 | `Footer` | `copyrightText`, `socialLinks[]` (`platform`, `url`, `icon`) | Подвал сайта |
-
-## ДЗ №3 — управление состоянием с помощью useState
-
-| # | Сценарий | Состояние | Где |
-|---|---|---|---|
-| 1 | Тёмная / светлая тема | `const [isDarkMode, setIsDarkMode] = useState(true)` | `App.jsx`, кнопка `ThemeToggle` в Header переключает класс `theme-dark` / `theme-light` на обёртке приложения |
-| 2 | Быстрый просмотр фильма | `const [isModalOpen, setIsModalOpen] = useState(false)` + `selectedMovie` | `App.jsx` → `QuickViewModal`; открывается кликом по карточке, закрывается крестиком, кнопкой «Закрыть» или кликом по оверлею |
-| 3 | Поиск по названию | `const [searchQuery, setSearchQuery] = useState('')` | `App.jsx` → контролируемый input в `SearchBar`, фильтрация на лету |
-| 4 | Фильтр по жанру | `const [selectedCategory, setSelectedCategory] = useState('Все')` | `App.jsx` → `CategoryFilter`, активный жанр подсвечен |
-| 5 | Пагинация каталога | `const [currentPage, setCurrentPage] = useState(1)` | `App.jsx` → `Pagination` (4 фильма на странице, «Назад» / «Вперёд» блокируются на границах) |
-| 6 | Количество билетов на премьеру | `const [quantity, setQuantity] = useState(1)` | `QuantitySelector` внутри окна фильма, не меньше 1 и не больше 10, считает итоговую сумму |
-| 7 | Избранное | `const [isFavorite, setIsFavorite] = useState(false)` | `FavoriteButton` на постере; меняет вид сердечка и через `onToggle` обновляет счётчик в шапке (`favoriteIds` в `App.jsx`) |
-| 8 | Сортировка каталога | `const [sortBy, setSortBy] = useState('rating-desc')` | `App.jsx` → `<select>` в `SortDropdown`: по рейтингу, году, названию |
-
-При смене поиска, жанра или сортировки каталог возвращается на первую страницу.
-
-## ДЗ №4 — жизненный цикл и побочные эффекты (useEffect)
-
-Данные приходят из имитации сервера [`src/api/cinemaApi.js`](src/api/cinemaApi.js): `setTimeout` со случайной задержкой 300–900 мс и поддержкой `AbortSignal`.
-
-| # | Сценарий | Зависимости | Где |
-|---|---|---|---|
-| 1 | Загрузка жанров, статистики и отзывов при монтировании (со скелетонами) | `[]` | `App.jsx` |
-| 2 | Сохранение избранного в `localStorage` | `[favoriteIds, isStorageReady]` | `App.jsx` |
-| 3 | Восстановление избранного и темы из `localStorage` при старте | `[]` | `App.jsx` |
-| 4 | `document.title`: «Каталог — Драма \| CineVibe», «Интерстеллар — смотреть онлайн \| CineVibe» | `[isModalOpen, selectedMovie, selectedCategory]` | `App.jsx` |
-| 5 | Debounce-поиск: запрос через 500 мс после окончания ввода, `clearTimeout` в очистке | `[searchQuery]` | `App.jsx` |
-| 6 | Таймер акции «Premium за полцены», `setInterval` + `clearInterval` | `[isExpired]` | `PromoBanner.jsx` |
-| 7 | `resize`: при ширине < 768px — бургер-меню | `[]` | `Header.jsx` |
-| 8 | Закрытие меню профиля по клику вне его | `[isMenuOpen]` | `UserProfile.jsx` |
-| 9 | Загрузка каталога при смене жанра, страницы, поиска, сортировки | `[catalogRequestKey]` | `App.jsx` |
-| 10 | Прокрутка к началу каталога при смене страницы | `[currentPage]` | `App.jsx` |
-| 11 | Закрытие модальных окон по Escape | `[isOpen, onClose]` | `Modal.jsx` |
-| 12 | Тост «Фильм добавлен в избранное», скрывается через 3 с | `[toast, onClose]` | `Toast.jsx` |
-| 13 | `AbortController`: отмена устаревшего запроса каталога (защита от гонки) | в эффекте #9 | `App.jsx` |
-| 14 | Полоса прогресса прокрутки страницы | `[]` | `ScrollProgress.jsx` |
-| 15 | Синхронизация темы с `prefers-color-scheme`, пока пользователь не выбрал тему сам | `[]` | `App.jsx` |
-
-Каждый эффект отмечен в коде комментарием `ДЗ №4 · #N` (в `App.jsx` — `#N`).
-
-## ДЗ №5 — глобальное состояние с помощью Context API
-
-Все три провайдера оборачивают приложение в [`src/App.jsx`](src/App.jsx): `ThemeProvider` → `AuthProvider` → `CartProvider` → `HomePage`.
-Каждый контекст лежит в своей папке `src/context/<имя>/` и состоит из трёх файлов: сам контекст (`createContext`), провайдер и кастомный хук. Хук выбрасывает понятную ошибку, если его вызвали вне провайдера.
-
-| Контекст | Что хранит | Методы и вычисляемые значения | Где используется хук |
-|---|---|---|---|
-| `ThemeContext` | `theme` (`'light'` / `'dark'`) | `toggleTheme` (сохраняет выбор в localStorage), `isDarkMode` | `useTheme()`: Header (переключатель, логотип), Card (`card--light/dark`), Footer (`footer--light/dark`, логотип), HomePage (класс темы на обёртке) |
-| `AuthContext` | `user` или `null`, `isAuthenticated` | `login(userData)`, `logout()`; при старте `useEffect` имитирует проверку сохранённого токена (`fetchSession`) | `useAuth()`: Header («Войти» или аватар с меню «Выйти»), ReviewForm (гость не может оставить отзыв), TicketsModal (оформление только после входа), LoginModal |
-| `CartContext` → «Мои билеты» | `cartItems` — билеты на показы в зале CineVibe Hall | `addToCart`, `removeFromCart`, `updateQuantity`, `clearCart`; `totalCount` и `totalPrice` считаются в провайдере | `useCart()`: Header (счётчик и сумма), Card (кнопка «+ 2 500 ₸»), QuickViewModal (выбор количества), TicketsModal (сама корзина) |
-
-Как проверить на сайте:
-
-1. **Тема** — кнопка ☀/☾: меняются цвета, логотипы в шапке и подвале, классы карточек и подвала; выбор сохраняется после перезагрузки.
-2. **Вход** — «Войти» в шапке (поля заполнены демо-данными). После входа в шапке аватар, в блоке отзывов открывается форма. После перезагрузки сессия восстанавливается; «Выйти» — в меню аватара.
-3. **Билеты** — «+ 2 500 ₸» на карточке или выбор количества в окне фильма → счётчик в шапке. В корзине можно менять количество, удалять, очищать; «Оформить» для гостя сначала просит войти.
-
-Prop drilling, который был в ДЗ №3–4 (`isDarkMode`, `logoSrc`, `onToggleTheme`, `user` передавались из App в Header и Footer), убран: эти компоненты берут данные из контекстов сами.
-
-## ДЗ №6 — навигация и маршрутизация (React Router)
-
-`react-router-dom` 7. `BrowserRouter` подключён в [`src/main.jsx`](src/main.jsx), карта маршрутов — в [`src/App.jsx`](src/App.jsx):
-
-| Адрес | Страница | Что показывает |
-|---|---|---|
-| `/` | `HomePage` | главная: баннер, «Популярное сейчас», статистика, отзывы |
-| `/movies` | `CatalogPage` | каталог: поиск, жанры, сортировка, пагинация — всё в адресе |
-| `/movie/:id` | `MovieDetailsPage` | страница фильма, билеты в зал, похожие фильмы |
-| `/favorites` | `FavoritesPage` | фильмы, отмеченные сердечком |
-| `/tickets` | `TicketsPage` | «Мои билеты» (корзина) и оформление |
-| `/about` | `AboutPage` | о кинотеатре, жанры, Premium, контакты |
-| `/login` | `LoginPage` | вход; после него возвращает туда, откуда пришли |
-| `/profile` → `/profile/orders`, `/profile/settings` | `ProfileLayout` + вкладки | личный кабинет, **только после входа** |
-| `/catalog` | — | `<Navigate to="/movies" replace />` — старый адрес каталога |
-| `*` | `NotFoundPage` | 404 с кнопками «На главную» и «В каталог» |
-
-| # | Требование | Где реализовано |
-|---|---|---|
-| 1 | `BrowserRouter`, `Routes`, `Route` | `main.jsx`, `App.jsx`: главная `/`, список `/movies`, инфо `/about` |
-| 2 | 404 | `pages/NotFoundPage.jsx`, маршрут `*` последним в списке |
-| 3 | `Link` и `NavLink` | `Navigation` — `NavLink` с `className={({ isActive }) => …}` (у «Главной» `end`); `Link` в логотипе, подвале, карточках, шапке («Избранное», «Мои билеты»), меню аватара |
-| 4 | `useParams` | `MovieDetailsPage`: `const { id } = useParams()` → `fetchMovie(Number(id))`; неизвестный id — экран «Фильм не найден» |
-| 5 | `useSearchParams` | `CatalogPage`: `?genre=Драма&q=дюна&sort=year-desc&page=2`; значения читаются из адреса при загрузке, некорректные заменяются значениями по умолчанию, `page` за пределами — на последнюю страницу; поиск попадает в адрес с задержкой 500 мс и `replace` |
-| 6 | `useNavigate` | вход → `navigate(откуда пришли, { replace: true })`; оформление билетов → `navigate('/profile/orders', { state: { orderId } })`; выход → `navigate('/', { replace: true })`; «← Назад» на странице фильма → `navigate(-1)`; кнопка «Смотреть» |
-| 7 | `Outlet`, вложенные маршруты | `layouts/MainLayout.jsx` — Header + `<Outlet />` + Footer для всех страниц (через `context` передаёт тосты и окно Premium); `pages/profile/ProfileLayout.jsx` — вкладки кабинета и свой `<Outlet />` |
-| 8 | `ProtectedRoute` + `Navigate` | `routes/ProtectedRoute.jsx`: пока проверяется сессия — «Проверяем вход…», гостя — `<Navigate to="/login" replace state={{ from: location }} />` |
-
-Что ещё поменялось:
-
-- **Избранное** стало глобальным (`context/favorites/`) — его используют шапка, каталог, страница фильма и `/favorites`; хранится в localStorage.
-- **История заказов** в `CartContext` (`orders`, `placeOrder`) — для вкладки «Мои заказы».
-- Заголовок вкладки браузера свой у каждой страницы (`hooks/useDocumentTitle.js`); при смене адреса страница прокручивается наверх.
-
-Как проверить на сайте:
-
-1. Пункты меню подсвечиваются, адрес меняется без перезагрузки; «Назад»/«Вперёд» браузера работают.
-2. `/movies`: выберите жанр и сортировку, введите поиск — всё видно в адресе. Скопируйте ссылку в новую вкладку — фильтры те же.
-3. Клик по карточке → `/movie/1`; `/movie/999` — «Фильм не найден»; `/что-угодно` — 404.
-4. Без входа откройте `/profile/orders` → попадёте на `/login`, после входа вернётесь в «Мои заказы».
-5. Добавьте билеты, «Оформить» на `/tickets` → «Мои заказы» с номером нового заказа.
-
-## Midterm (ДЗ №7) — финальная интеграция
-
-Все предыдущие ДЗ собраны в одно приложение (ветка `mid`). Проверка по чек-листу:
-
-| Требование | Как выполнено |
+| Адрес | Страница |
 |---|---|
-| Единая предметная область | Только онлайн-кинотеатр: каталог, фильм, билеты в зал, избранное, кабинет. Тестовых и неиспользуемых компонентов нет |
-| Адаптивность | Сетки на `auto-fit` / `clamp()`, мобильное меню; на 390, 768 и 1440 px нет горизонтального скролла ни на одной странице |
-| Единый стиль и состояния элементов | Цвета, радиусы и тени — CSS-переменные в `styles/index.css`, шрифт Manrope; у кнопок и ссылок есть `:hover`, `:focus-visible`, `:disabled` |
-| Loading | Скелетоны: подборка и статистика на главной, каталог, страница фильма; «Проверяем вход…» в ProtectedRoute |
-| Empty | «Ничего не нашлось» (со сбросом фильтров), пустое избранное, пустая корзина, нет заказов |
-| Error | Страница 404; «Фильм не найден»; ошибки валидации во входе и форме отзыва; **ошибка загрузки** с кнопкой «Повторить» (`components/ErrorState`) на главной, в каталоге и на странице фильма; **`ErrorBoundary`** вокруг страниц |
-| Компоненты и props | Декомпозиция на 29 компонентов, `children` в `Container`, `Modal`, `ErrorBoundary`; колбэки `onSelect`, `onToggle`, `onRetry`, `onConfirm`… |
-| useState | формы (вход, отзыв), модальные окна, поиск, меню, счётчик билетов, переключатели |
-| useEffect | загрузка данных с отменой запроса, localStorage, таймер промо и тостов, клик вне меню профиля, `document.title`, прокрутка наверх при смене адреса |
-| Context API | `ThemeContext`, `AuthContext`, `CartContext`, `FavoritesContext` |
-| React Router | см. ДЗ №6: `Link`/`NavLink`, `/movie/:id`, `useSearchParams`, `ProtectedRoute`, `useNavigate`, 404 |
-| Консоль без ошибок и предупреждений | Проверено автотестом в режиме разработки (`npm run dev`, StrictMode) и в production-сборке |
-| Структура папок | `components/`, `pages/`, `context/`, `assets/` (логотипы, импортируются через Vite), `styles/` (глобальные стили), а также `layouts/`, `routes/`, `hooks/`, `api/`, `data/`, `utils/` |
+| `/` | Главная: «Сейчас в прокате», хиты кинобара, расписание на сегодня, отзывы зрителей |
+| `/products` | Каталог: поиск с задержкой, разделы «Билеты» и «Кинобар», категории, сортировка. Все параметры хранятся в адресе, поэтому ссылкой на подборку можно поделиться |
+| `/products/:id` | Страница товара. У фильма вкладки «Описание / Сеансы / Отзывы» и выбор количества билетов. Кнопка «Назад» и похожие товары |
+| `/favorites` | Избранное (сердечко на любой карточке) |
+| `/cart` | Корзина: количество, удаление с подтверждением, промокод `CINEVIBE10` (−10%), оформление заказа |
+| `/login`, `/register` | Вход и регистрация |
+| `/profile` | Личный кабинет, только после входа. Вложенные страницы: `/profile/orders` — заказы, `/profile/settings` — имя и тема |
+| `/about` | О кинотеатре: залы, частые вопросы, контакты |
+| `/404` и любой неизвестный адрес | Страница «не найдено» |
 
-Как увидеть состояния ошибок:
+Старые адреса (`/movies`, `/movie/:id`, `/tickets`, `/bar`) перенаправляют на новые.
 
-- **Нет сети** — откройте сайт, затем DevTools → Network → **Offline** и перейдите в «Фильмы» или на страницу фильма: появится «Не удалось загрузить данные». Верните сеть и нажмите «Повторить».
-- **ErrorBoundary** — в DevTools → Application → Local Storage замените `cinevibe:orders` на `[{"id":"x"}]` и откройте «Мои заказы»: вместо белого экрана появится «Что-то пошло не так», шапка и меню продолжат работать.
-- Испорченные записи в `cinevibe:tickets` и `cinevibe:favorites` при загрузке отбрасываются — в шапке не будет `NaN`.
-
-## ДЗ №8 — формы и управляемые компоненты
-
-Страница `/register` ([`pages/RegisterPage.jsx`](src/pages/RegisterPage.jsx)) и форма [`components/RegisterForm/RegisterForm.jsx`](src/components/RegisterForm/RegisterForm.jsx). Сторонних библиотек для форм нет — только `useState`, `onChange`, `onSubmit`, `onClick`, `value`, `checked`, `preventDefault` и условный рендеринг.
-
-| Требование | Где реализовано |
-|---|---|
-| 8 полей разных типов | `name` (text), `email`, `password`, `age` (number), `country` (select), `gender` (radio), жанры (checkbox), `about` (textarea) |
-| Controlled Components | у каждого поля свой `useState`; поле показывает его через `value` (radio и checkbox — `checked`), меняется только через `onChange` |
-| select — одна страна | `<select value={country}>`, список стран в `data/site.js` |
-| radio — один вариант | общий `name="gender"`, `checked={gender === item.value}` |
-| checkbox — несколько вариантов | массив `genres`: отмеченный жанр добавляется, снятый убирается (`handleGenreChange`) |
-| `handleSubmit` + `preventDefault` | валидация всех полей через `validateRegisterForm` из [`utils/validation.js`](src/utils/validation.js) |
-| Правила | имя и email не пустые (email ещё и с доменом), пароль ≥ 6 символов, возраст ≥ 18, страна, пол и хотя бы один жанр выбраны; «О себе» необязательно |
-| `errors` в отдельном state | `useState({})`; ошибка выводится прямо под полем (`FormField`), только если она есть |
-| Исправил поле — ошибка исчезла | `refreshError`: при изменении поле проверяется заново, верное — ошибка убирается |
-| Успех | «Форма успешно отправлена» и блок «Данные пользователя» — только после успешной отправки (пароль показан точками) |
-| `handleReset` | очищает все поля, select, radio, checkbox, textarea, ошибки и сообщение об успехе; вызывается кнопками «Сбросить» (до отправки) и «Очистить форму» (после) |
-| Доп. задание: общий `handleChange` | один обработчик для text, email, password, number, select, radio и textarea — нужное поле определяется по атрибуту `name` |
-
-Что ещё сделано:
-
-- Поле с ошибкой подсвечивается и получает `aria-invalid`, текст ошибки связан с полем через `aria-describedby`; после неудачной отправки фокус переходит на первое неверное поле.
-- Пароль можно показать кнопкой «Показать»; у «О себе» счётчик символов (до 500).
-- После регистрации пользователь сразу входит в аккаунт (`AuthContext`) — в шапке появляется его аватар. Со страницы входа есть ссылка «Зарегистрироваться».
-- «Навыки» из задания в кинотеатре заменены любимыми жанрами: это тот же набор checkbox с выбором нескольких вариантов и правилом «хотя бы один».
-
-## ДЗ №9 — оптимизация производительности
-
-«Каталог товаров» из задания в кинотеатре — **кинобар** на странице `/bar` ([`pages/BarPage.jsx`](src/pages/BarPage.jsx)): 24 позиции (попкорн, напитки, снеки, комбо, мерч) в [`data/barProducts.js`](src/data/barProducts.js). Сторонних библиотек нет — только `React.memo`, `useMemo`, `useCallback` и встроенный `<Profiler>`.
-
-| Компонент из задания | В проекте |
-|---|---|
-| App | `pages/BarPage.jsx` — состояние страницы: поиск, категория, сортировка, гости, заказ |
-| ProductList | `components/ProductList` — список через `map()`, пустое состояние «Ничего не нашлось» |
-| ProductItem | `components/ProductItem` — карточка, `console.log('ProductItem render', …)`, кнопка «Добавить в корзину»; `MemoProductItem = memo(ProductItem)` |
-| Search | уже существующий `components/SearchBar` (управляемое поле), получил проп `label` |
-| Counter | `components/Counter` — «Сколько вас в кино?» с кнопками − и + |
-| ProductStats | `components/ProductStats` — найдено, средняя цена, средний рейтинг; каждое среднее — в своём `useMemo` с `console.log` |
-
-| Требование | Где реализовано |
-|---|---|
-| 20+ товаров: id, name, category, price, rating | 24 товара в `data/barProducts.js` |
-| Поиск по названию, категория через select, 3 сортировки | `filterProducts` в [`utils/products.js`](src/utils/products.js); select категории — переиспользованный `SortDropdown` |
-| Функция добавления в корзину через props + `useCallback` | `memoizedAddToCart` в `BarPage`: функциональное обновление `setCart((prev) => …)`, поэтому зависимостей нет |
-| `useMemo` для отфильтрованного списка | меняется поиск/категория/сортировка → список пересчитывается; нажатие «+» его не трогает |
-| Тяжёлое вычисление (`calculateSomething`) | `calculateBestDeal` — «самое выгодное предложение» + искусственный цикл на 3 млн шагов; в `useMemo` от отфильтрованного списка |
-| Сравнение до/после | переключатель «React.memo + useMemo + useCallback» на странице включает и выключает все три приёма сразу |
-| Доп. задание: 1000 товаров | переключатель «1000 товаров» — `generateProducts(1000)` из 24 базовых; `<Profiler>` пишет в консоль время рендера списка (в режиме разработки) |
-
-### До и после оптимизации
-
-Замеры автотестом на production-сборке (сколько раз выполнилось и сколько миллисекунд от клика до следующего кадра):
-
-| Действие | Без оптимизации | С оптимизацией |
-|---|---|---|
-| «+» у счётчика, 24 товара | 24 рендера `ProductItem`, фильтр, тяжёлое вычисление и обе средние заново · ~30 мс | 0 рендеров карточек, ничего не пересчитывается · ~3 мс |
-| «Добавить в корзину», 24 товара | 24 рендера `ProductItem` · ~30 мс | 1 рендер — только нажатая карточка · ~5 мс |
-| «+» у счётчика, 1000 товаров | 1000 рендеров `ProductItem` · ~100 мс | 0 рендеров · ~6–10 мс |
-| «Добавить в корзину», 1000 товаров | 1000 рендеров · ~110–125 мс | 1 рендер · ~6 мс |
-| Ввод «кола» в поиск, 1000 товаров | — | фильтр, тяжёлое вычисление и статистика — на каждую букву (данные изменились); карточки не перерисовываются: оставшиеся товары получают те же props |
-
-**Что перерисовывалось раньше и почему.** Любое изменение state страницы — счётчик гостей, заказ — перерисовывает `BarPage` и всех его детей: так React работает по умолчанию. При этом на каждый рендер заново фильтровался список (новый массив), заново создавалась функция добавления в корзину и заново выполнялось тяжёлое вычисление. Поэтому все карточки перерисовывались, хотя на экране в них ничего не менялось, а `useMemo` внутри `ProductStats` не помогал: он получал каждый раз новый массив и честно пересчитывал средние.
-
-**Что изменилось.**
-- `useMemo` в `BarPage` сохраняет отфильтрованный массив и результат тяжёлого вычисления, пока не изменятся поиск, категория, сортировка или сами товары. Ссылка на массив остаётся прежней — поэтому и `useMemo` в `ProductStats` перестаёт пересчитывать средние.
-- `useCallback` даёт карточкам одну и ту же функцию `onAddToCart` между рендерами.
-- `React.memo` у `ProductItem` сравнивает props поверхностно: товар — тот же объект, функция — та же, количество — то же число, значит рендер пропускается. При «Добавить в корзину» меняется `quantity` только у одной карточки — перерисовывается только она.
-- Без любого из трёх приёмов оптимизация ломается: `memo` бесполезен, если функция или массив приходят новыми, а `useCallback` и `useMemo` бесполезны, если ребёнок не обёрнут в `memo`.
-
-**Когда оптимизация не нужна.** На 24 товарах разница — 30 мс против 3 мс, и почти всё это — искусственный тяжёлый цикл; без него обе версии укладываются в один кадр. `memo`, `useMemo` и `useCallback` тоже стоят времени и памяти: сравнить props, сохранить значение, проверить зависимости. Поэтому их ставят туда, где есть измеримая проблема — длинный список, тяжёлое вычисление, частые обновления родителя, — а не на каждый компонент. Сам `ProductList` в проекте не обёрнут в `memo`: он лёгкий, а дорогие карточки внутри уже защищены.
-
-Как проверить: откройте `/bar`, DevTools → Console, нажмите «+» у счётчика гостей, потом снимите галочку «React.memo + useMemo + useCallback» и нажмите ещё раз. В режиме разработки (`npm run dev`) React в `StrictMode` вызывает каждый рендер дважды, поэтому сообщений в консоли вдвое больше — второе React показывает бледным.
-
-## ДЗ №10 — кастомные хуки и интеграция с API
-
-Каталог пользователей — страницы `/users` и `/users/:id` (пункт меню «Пользователи»). Данные настоящие, из публичного API [JSONPlaceholder](https://jsonplaceholder.typicode.com/users). Вся работа с запросом лежит в хуке `useFetch`, страницы только показывают результат.
-
-| # | Требование | Где реализовано |
-|---|---|---|
-| 1 | Каталог пользователей из API | `pages/UsersPage.jsx`, адреса — в `api/usersApi.js` |
-| 2 | Структура | `App.jsx` → `UsersPage` → `UserList` → `UserCard`, хуки в `hooks/` |
-| 3 | `useFetch(url)` → `{ data, loading, error }` | `hooks/useFetch.js`: три `useState`, `useEffect`, `fetch()`, `async/await` |
-| 4 | Логика запроса не в компоненте | `UsersPage` вызывает `useFetch(USERS_URL)` и нигде не вызывает `fetch` |
-| 5 | Три состояния страницы | «Загрузка...», `ErrorState` с сообщением, список `UserList` |
-| 6 | `UserCard` | Через props: имя, username, email, телефон, компания |
-| 7 | Поиск по имени без новых запросов | `utils/users.js` → `filterUsers` работает с уже полученным массивом |
-| 8 | Фильтр по компании через select | Переиспользован `SortDropdown`; список компаний собирает `getCompanies` из данных |
-| 9 | «Повторить запрос» и `refetch` | `refetch` увеличивает счётчик `attempt` из зависимостей `useEffect`, и запрос выполняется заново |
-| 10 | Обработка ошибок | Нет сети → `TypeError`; ответ 404/500 → проверка `response.ok`, потому что сам `fetch` такие ответы ошибкой не считает. На экране — понятный текст |
-| 11 | Пустой результат | `UserList`: «Пользователи не найдены» |
-| 12 | «Очистить поиск» | Сбрасывает поиск и компанию, полный список возвращается сразу |
-| 13 | `useDebounce(search, 500)` | `hooks/useDebounce.js`: таймер в `useEffect`, новая буква отменяет прошлый таймер |
-| Доп. | Страница `/users/:id` | `pages/UserDetailsPage.jsx`: `useParams()` + тот же `useFetch`, кнопка «← Назад» |
-| Доп. | Посты пользователя | Второй вызов того же `useFetch` с адресом `/users/:id/posts`, со своей загрузкой и ошибкой |
-
-**Отмена устаревшего запроса.** `useEffect` создаёт `AbortController` и в очистке отменяет запрос: закрытая страница или новый запрос не дадут старому ответу перезаписать данные. Поэтому в режиме разработки во вкладке Network виден один отменённый запрос: `StrictMode` запускает эффект дважды.
-
-**Шапка.** С новым пунктом меню перестало хватать места: у вошедшего пользователя меню наезжало на правый блок. Теперь пункты компактнее, шапка шире, имя и сумма билетов скрываются раньше, а меню уходит второй строкой на окнах уже 1280 px.
-
-Как проверить: `/users`, ввести `clem` — список обновится через полсекунды, а в Network не будет новых запросов. Ошибку показывает DevTools → Network → Offline и «Повторить запрос».
-
-## ДЗ №11 — тестирование React-приложения
-
-Task Manager — страница `/tasks` (ссылка «Задачи» в подвале сайта). Тесты написаны на Vitest и React Testing Library и проверяют поведение глазами пользователя: что он видит, что происходит после ввода и клика. Настоящий API в тестах не вызывается: `fetch` подменён.
-
-```bash
-npm test             # запустить все тесты один раз
-npm run test:watch   # перезапускать при изменении файлов
-```
-
-**40 тестов в 8 файлах (по заданию нужно минимум 15).**
-
-| Файл | Тестов | Что проверяет |
-|---|---|---|
-| `components/TaskForm/TaskForm.test.jsx` | 8 | Поле и кнопка «Добавить» на странице; задача появляется в списке (клик и Enter); пустую задачу и задачу из пробелов добавить нельзя; ошибка исчезает при вводе; поле очищается |
-| `components/TaskItem/TaskItem.test.jsx` | 5 | Название на странице; «Удалить» убирает задачу, и только свою; чекбокс ставит и снимает отметку; клик по названию тоже отмечает |
-| `components/TaskFilter/TaskFilter.test.jsx` | 5 | Три задачи, одна выполнена: All, Active, Completed; задача уходит из Active после отметки; пустой фильтр при непустом списке |
-| `pages/TasksPage.test.jsx` | 3 | «Задач пока нет»; полный сценарий с задачей Learn React Testing (доп. задание); страница открывается внутри всего сайта по адресу `/tasks` |
-| `pages/UsersPage.test.jsx` | 10 | Loading, Success, Error (нет сети и ответ 500); поиск без нового запроса и с паузой; «Пользователи не найдены»; «Очистить поиск»; фильтр по компании; «Повторить запрос» после ошибки и после успеха |
-| `pages/UserDetailsPage.test.jsx` | 3 | `id` из адреса попадает в запросы пользователя и постов; ошибка 404; кнопка «Назад» |
-| `hooks/useFetch.test.js` | 4 | Данные, ответ 404, `refetch`, отмена старого запроса при смене адреса |
-| `hooks/useDebounce.test.js` | 2 | Значение меняется только через 500 мс; новая буква запускает отсчёт заново |
-
-| Требование | Где реализовано |
-|---|---|
-| Компоненты `TaskForm`, `TaskList`, `TaskItem`, `TaskFilter` | `components/`, состояние хранит `pages/TasksPage.jsx` — в этом проекте он играет роль `App.jsx` из задания |
-| Настройка Vitest | Секция `test` в `vite.config.js` (среда jsdom), скрипты `test` и `test:watch` в `package.json`, `src/test/setup.js` |
-| `screen.getByRole`, `getByText`, `getByPlaceholderText` | Во всех тестах компонентов и страниц |
-| `userEvent`: `await user.type(...)`, `await user.click(...)` | Во всех сценариях; ещё `user.selectOptions` для фильтра по компании |
-| Мокирование API | `src/test/mockUsers.js`: `vi.stubGlobal('fetch', …)`, тестовые пользователи и ответы сервера |
-
-**Как проверить, что тесты настоящие.** Приложение по очереди ломали в 18 местах: убирали проверку пустой задачи, отключали `refetch`, убирали задержку поиска и так далее. Каждую поломку заметил хотя бы один тест.
-
-## ДЗ №12 — продвинутые паттерны компонентов
-
-Страница `/patterns` («UI-паттерны», ссылка в подвале в колонке «Для разработчиков»). На ней все паттерны из задания показаны на данных кинотеатра. Сама страница собрана на `Layout`: в header заголовок, в sidebar оглавление, в footer подпись.
-
-| Паттерн | Файл | Что видно на странице |
-|---|---|---|
-| `Card` — содержимое через `children`, плюс `title` и `size` | `components/Card/` | Три карточки с разным содержимым и размером; карточки фильмов в каталоге (`MovieCard`) теперь тоже построены на `Card` |
-| `Button` — `children`, `variant` (primary, secondary, danger, outline), `disabled`, `onClick` | `components/Button/` | Все варианты; на сайте все кнопки переведены на `children` |
-| `Modal` — `isOpen`, `onClose`, содержимое через `children`, `title` необязателен | `components/Modal/` | «Удалить билет из корзины?» с кнопками «Отмена» и «Удалить» |
-| `Layout` — слоты header, sidebar, children, footer | `components/Layout/` | Каркас самой страницы и мини-пример |
-| `Tabs` — Compound Component на Context | `components/Tabs/` | «Описание / Сеансы / Отзывы» фильма. Вкладки и панели связываются по порядку, без ручных номеров |
-| `Toggle` — Compound Component | `components/Toggle/` | «Подробнее о зале» |
-| `Accordion` (дополнительное задание) — один или несколько открытых элементов | `components/Accordion/` | Частые вопросы и переключатель «Открывать несколько ответов» |
-| `DataLoader` — Render Props | `components/DataLoader/` | Загрузка афиши с задержкой: состояния loading, ошибка (в режиме Offline) с кнопкой «Повторить», данные. Плюс кнопка «Перезагрузить» |
-| `withLoading` — Higher-Order Component | `components/withLoading/` | `MovieListWithLoading = withLoading(MovieList)`: кнопка «Загрузить заново» на секунду показывает «Loading...», а исходный список получает свои props без изменений |
-
-Тесты лежат рядом с компонентами. Они проверяют: переключение вкладок, показ и скрытие в `Toggle`, оба режима `Accordion`, состояния `DataLoader` (загрузка, ошибка, повторная загрузка), что `withLoading` передаёт props и не передаёт `isLoading`, `children` и `disabled` у `Button`, `Modal` без заголовка, а также страницу целиком внутри сайта.
-
-## ДЗ №13 — продвинутые паттерны компонентов, часть 2
-
-Страница `/form-builder` («Конструктор форм», ссылка в подвале в колонке «Для разработчиков»). На ней собирается анкета зрителя для закрытого показа: имя, email, количество гостей и город.
-
-| Тема из задания | Где в проекте |
-|---|---|
-| Controlled и Uncontrolled в одном компоненте | `components/Input/`. Передан `value` — управляет родитель, и `onChange` получает строку (`onChange={setName}`). Передан `defaultValue` — значение живёт в DOM. На странице показаны оба варианта |
-| `forwardRef` | `components/SearchInput/`. Родитель получает настоящий `<input>`, кнопка «Focus search» ставит в него фокус |
-| `useImperativeHandle` | `components/CustomInput/`. Через `ref` доступны только `focus()`, `clear()` и `getValue()`; кнопки Focus, Clear и Get value, значение выводится на страницу |
-| Provider Pattern, Context | `components/FormProvider/`. `FormProvider` отдаёт значения, ошибки и функции изменения, добавления, удаления и сброса; `useForm()` даёт к ним доступ без prop drilling |
-| `useReducer` и Reducer Pattern | `formReducer.js`, действия `ADD_FIELD`, `REMOVE_FIELD`, `UPDATE_FIELD`, `UPDATE_VALUE`, `RESET_FORM`, `SET_ERRORS`. Состояние меняется только через `dispatch()` |
-| State Reducer Pattern | `<FormProvider reducer={customReducer}>`: внешний reducer получает стандартный третьим аргументом. На странице переключатель «Ограничить 6 полями» подключает reducer, который не даёт добавить седьмое поле |
-| Dynamic Components | `components/DynamicField/` сам выбирает элемент по типу поля: текст, email, число, список (а также пароль, чекбокс и переключатель — пригодятся в формах сайта) |
-| Dynamic Forms | `components/FormBuilder/` и `components/FieldEditor/`: «Добавить поле», название, тип, «Обязательное», удаление |
-| Separation of Concerns, режимы Edit / Preview | `FormBuilder` редактирует структуру, `components/FormPreview/` показывает форму пользователю. В Edit справа живьём видна структура формы (JSON) |
-| Валидация | `utils/formValidation.js`: обязательное поле, корректный email, число. Submit в Preview показывает объект всех значений |
-| Undo / Redo (дополнительное задание) | `withHistory` в `formReducer.js`: история `past / present / future`, действия `UNDO` и `REDO`. В историю попадают только изменения структуры, а ввод значений нет, иначе Undo откатывал бы по одной букве |
-
-Числовое поле в форме — текстовое с цифровой клавиатурой (`inputMode="decimal"`). У `<input type="number">` браузер вместо «2x» отдаёт пустую строку, и проверка «должно быть число» никогда бы не сработала. Дробь можно писать и через точку, и через запятую (`1,5`): на казахстанской и русской раскладке телефона десятичный разделитель — запятая. Undo и Redo откатывают только структуру формы: то, что уже введено в оставшиеся поля, не стирается.
-
-Тесты проверяют:
-- **reducer:** каждое действие, сценарий из задания add → change → delete → undo → undo → redo, Undo после сброса;
-- **поля ввода:** оба режима `Input`, фокус через `forwardRef`, три метода `CustomInput`;
-- **DynamicField:** выбор элемента для каждого типа;
-- **FormProvider:** переопределение действия через `customReducer`;
-- **страница целиком:** конструктор, Preview с ошибками и Submit, Undo/Redo, лимит полей.
-
-## Структура
+## Как устроен проект
 
 ```
 src/
-├── api/            # имитация сервера: загрузка с задержкой и отменой, ошибка без сети, проверка сессии; адреса API пользователей
-├── assets/         # логотипы для светлой и тёмной темы (импорт через Vite)
-├── components/     # компоненты, каждый в своей папке со своими стилями
-├── context/        # theme/, auth/, cart/, favorites/ — контекст, провайдер и хук в каждой
-├── data/           # моковые данные: фильмы, навигация, статистика, отзывы
-├── hooks/          # useDocumentTitle, useLayout, useLogout, useToggleFavorite, useFetch, useDebounce
-├── layouts/        # MainLayout — шапка, <Outlet />, подвал, окно Premium, тосты
-├── pages/          # страницы маршрутов; profile/ — личный кабинет с вложенными вкладками
-├── routes/         # ProtectedRoute
-├── test/           # настройка тестов и подмена API; сами тесты лежат рядом с кодом (*.test.jsx)
-├── styles/         # index.css — дизайн-токены и базовые стили; shared.css — общие стили страниц
-├── utils/          # форматирование, поиск и сортировка (фильмы, кинобар, пользователи), localStorage, правила проверки форм, постеры и аватары
-├── App.jsx         # провайдеры контекстов и карта маршрутов
-└── main.jsx        # BrowserRouter, подключение глобальных стилей
-public/
-└── favicon.svg     # отдаётся как есть по адресу /favicon.svg (нужен в index.html)
+├── components/
+│   ├── common/      Button, Input, Select, Modal, Card, Loader, ErrorMessage, EmptyState, Tabs, Toggle,
+│   │                Accordion, DataLoader, withLoading, SearchInput, CustomInput и другие общие компоненты
+│   ├── layout/      MainLayout (на Layout), Header, Footer, Navigation, UserMenu, Container
+│   ├── product/     ProductCard, ProductList, ProductFilters, ProductDetails, FavoriteButton, ReviewForm
+│   ├── cart/        CartItem, CartList, CartSummary, PromoCode
+│   ├── forms/       FormProvider (useReducer + Context), DynamicField, SchemaForm, LoginForm, RegisterForm
+│   └── home/        HeroSection, TodaySchedule, TestimonialCard
+├── pages/           Home, Products, ProductDetails, Favorites, Cart, Profile, Login, Register, About, NotFound
+├── hooks/           useFetch, useDebounce, useDocumentTitle, useProductReviews, useToggleFavorite, useLogout, useLayout
+├── context/         AuthContext, CartContext (+ cartReducer), FavoritesContext, ThemeContext
+├── services/api.js  адреса и запросы к API, имитация сервера учётных записей
+├── routes/          AppRoutes, ProtectedRoute
+├── utils/           helpers (цены, даты, фильтры каталога, промокоды), formValidation, storage, placeholders
+├── tests/           тесты и помощники (renderApp, подмена API)
+├── App.jsx          провайдеры и маршруты
+└── main.jsx
+public/api/          «сервер» каталога: products.json, products/<id>.json, home.json
+scripts/             products.mjs — единственный источник данных каталога, build-api.mjs собирает из него JSON
 ```
+
+- **Данные.** Каталог загружается настоящими запросами `fetch` к JSON в `public/api/` через хук `useFetch`. Каждый товар — отдельный файл, поэтому страница товара делает свой запрос по `id` из адреса. Ответ «не найдено» (и `index.html`, который dev-сервер отдаёт вместо отсутствующего файла) превращается в понятную страницу «Товар не найден».
+- **Учётные записи.** Настоящего бэкенда у проекта нет, поэтому вход и регистрацию имитирует `services/api.js`. Аккаунты хранятся в localStorage, пароль — только как SHA-256. Флажок «Запомнить меня» решает, где живёт сессия: в localStorage или только во вкладке (sessionStorage).
+- **Состояние.**
+  - Корзина — `useReducer` с действиями ADD, REMOVE, SET_QUANTITY, CLEAR, PLACE_ORDER.
+  - Избранное хранит только `id`, сами товары берутся из каталога, так что одни и те же данные не дублируются.
+  - Формы входа и регистрации описаны массивом полей: `FormProvider` хранит значения через `useReducer`, а `DynamicField` сам выбирает элемент по типу поля.
+
+## Темы курса в проекте
+
+| Тема | Где в проекте |
+|---|---|
+| Компоненты и props | Все компоненты, JSDoc-описание props |
+| useState, useEffect | Формы и UI-состояния; загрузка данных, localStorage, таймеры уведомлений |
+| React Router, useParams, useSearchParams, useNavigate | `routes/AppRoutes.jsx`; `/products/:id`; фильтры каталога в адресе; «Назад» и переходы после входа и заказа |
+| Outlet, Protected Routes | Каркас `MainLayout`, кабинет `Profile` с вложенными страницами, `ProtectedRoute` с возвратом на нужную страницу после входа |
+| Формы, Controlled Components | `LoginForm`, `RegisterForm` (input, select, checkbox, radio, проверка, ошибки, «Сбросить») |
+| Uncontrolled + ref | «Имя в профиле» в `/profile/settings` (`defaultValue`, значение читается при сохранении) |
+| forwardRef | `SearchInput`: «Изменить запрос» в пустом каталоге ставит фокус в поиск |
+| useImperativeHandle | `CustomInput` в промокоде корзины: `getValue`, `clear`, `focus` |
+| Context, useReducer | `AuthContext`, `CartContext` + `cartReducer`, `FavoritesContext`, `ThemeContext`, `FormProvider` |
+| Custom Hooks, API | `useFetch`, `useDebounce`, `useProductReviews`; `services/api.js` |
+| Оптимизация | `React.memo` у `ProductCard` и `CartItem`; `useCallback` у функций, которые к ним уходят; `useMemo` для фильтрации каталога, итогов корзины и списка избранного. У каждого места есть комментарий, зачем оно нужно |
+| Компоненты с children, Layout | `Card`, `Modal`, `Layout` (каркас сайта и каталог с боковой колонкой фильтров), `HeroSection` |
+| Compound Components | `Tabs` на странице фильма, `Toggle` для промокода, `Accordion` в частых вопросах |
+| Render Props, HOC | `DataLoader` на главной, `withLoading(ProductList)` в каталоге |
+| Тестирование | `src/tests/`: каталог, поиск, товар, корзина, удаление, промокод, регистрация, вход, защищённый профиль, все маршруты и перенаправления, компоненты, хуки, reducer'ы |
+
+Состояния загрузки, ошибки и пустого результата одинаково показаны на всех страницах с данными: `Loader`, `ErrorMessage` с кнопкой «Повторить» и `EmptyState`. В тестах сеть заменена теми же JSON из `public/api/`.
+
+## История домашних заданий
+
+Каждое задание сохранено меткой git: `git checkout hw12`, вернуться — `git checkout main`.
+
+| Метка | Задание |
+|---|---|
+| `hw2` – `hw6` | Props, useState, useEffect, Context API, React Router |
+| `midterm` | Финальная интеграция (ДЗ №7) |
+| `hw8` | Формы и управляемые компоненты |
+| `hw9` | Оптимизация производительности |
+| `hw10` | Кастомные хуки и работа с API |
+| `hw11` | Тестирование (Vitest + RTL) |
+| `hw12` | Продвинутые паттерны компонентов: демо-страница `/patterns` |
+| `hw13` | Формы, ref, State Reducer, Undo/Redo: конструктор форм `/form-builder` |
+| `hw14` | Финальный проект: сайт стал магазином кинотеатра (этот README) |
+
+Учебные страницы прошлых заданий (задачи, пользователи, демо-страницы паттернов) в `hw14` не входят. Их компоненты работают в настоящих местах магазина, а сами страницы остались в своих метках.

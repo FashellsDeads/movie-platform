@@ -1,6 +1,6 @@
 import { startTransition, useCallback } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { useAuth } from '../context/auth/useAuth.js'
+import { useAuth } from '../context/AuthContext.jsx'
 
 /**
  * Выход из аккаунта с переходом на главную.
@@ -15,6 +15,7 @@ export function useLogout() {
   const { logout } = useAuth()
   const navigate = useNavigate()
 
+  // стабильная функция: уходит в меню пользователя и кнопки, которые не должны перерисовываться зря
   return useCallback(() => {
     startTransition(() => {
       navigate('/', { replace: true })

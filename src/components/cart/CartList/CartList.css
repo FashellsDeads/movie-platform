@@ -1,0 +1,19 @@
+.cart-list {
+  display: grid;
+  gap: 12px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.cart-list__dialog-text {
+  margin: 0 0 20px;
+  color: var(--color-muted);
+}
+
+.cart-list__dialog-actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: 12px;
+}

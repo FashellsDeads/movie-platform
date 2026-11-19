@@ -1,0 +1,156 @@
+.user-menu {
+  position: relative;
+  min-width: 0;
+}
+
+.user-menu__trigger {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-width: 0;
+  padding: 4px 8px 4px 4px;
+  border: none;
+  border-radius: 999px;
+  font: inherit;
+  text-align: left;
+  color: inherit;
+  background: transparent;
+  cursor: pointer;
+}
+
+.user-menu__trigger:hover,
+.user-menu__trigger[aria-expanded='true'] {
+  background: var(--color-surface-raised);
+}
+
+.user-menu__trigger:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 2px;
+}
+
+.user-menu__avatar {
+  flex-shrink: 0;
+  border-radius: 50%;
+  box-shadow: 0 0 0 2px var(--color-bg), 0 0 0 4px var(--color-accent);
+}
+
+.user-menu__info {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  line-height: 1.25;
+}
+
+.user-menu__name {
+  font-size: 0.875rem;
+  font-weight: 700;
+  color: var(--color-text);
+  white-space: nowrap;
+}
+
+.user-menu__role {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--color-accent);
+  white-space: nowrap;
+}
+
+.user-menu__chevron {
+  font-size: 0.75rem;
+  color: var(--color-muted);
+}
+
+.user-menu__menu {
+  position: absolute;
+  top: calc(100% + 10px);
+  right: 0;
+  z-index: 70;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 260px;
+  padding: 20px;
+  border: 1px solid var(--color-border-strong);
+  border-radius: var(--radius-lg);
+  text-align: center;
+  background: var(--color-surface);
+  box-shadow: var(--shadow-lg);
+  animation: profile-menu-in 0.15s ease;
+}
+
+.user-menu__menu-avatar {
+  margin-bottom: 10px;
+  border-radius: 50%;
+}
+
+.user-menu__menu-name {
+  margin: 0;
+  font-weight: 800;
+  color: var(--color-text);
+}
+
+.user-menu__menu-email {
+  margin: 2px 0 10px;
+  font-size: 0.8125rem;
+  color: var(--color-muted);
+  word-break: break-all;
+}
+
+.user-menu__menu-role {
+  margin-bottom: 16px;
+  padding: 4px 12px;
+  border-radius: 999px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: var(--color-accent);
+  background: var(--color-surface-raised);
+}
+
+.user-menu__menu-action {
+  width: 100%;
+  padding: 10px 14px;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  font: inherit;
+  font-size: 0.875rem;
+  font-weight: 700;
+  color: var(--color-text);
+  background: transparent;
+  cursor: pointer;
+}
+
+.user-menu__menu-action:hover,
+.user-menu__menu-action:focus-visible {
+  border-color: var(--color-accent);
+  color: var(--color-accent);
+  outline: none;
+}
+
+a.user-menu__menu-action {
+  display: block;
+  margin-bottom: 8px;
+  text-align: center;
+}
+
+.user-menu__menu .button--danger {
+  margin-top: 8px;
+}
+
+@keyframes profile-menu-in {
+  from {
+    opacity: 0;
+    transform: translateY(-6px);
+  }
+}
+
+/* На средних экранах в шапке остаётся только аватар, подробности — в меню */
+@media (max-width: 1439px) {
+  .user-menu__info,
+  .user-menu__chevron {
+    display: none;
+  }
+
+  .user-menu__trigger {
+    padding: 4px;
+  }
+}

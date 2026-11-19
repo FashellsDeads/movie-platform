@@ -1,5 +1,5 @@
 import { useCallback } from 'react'
-import { useFavorites } from '../context/favorites/useFavorites.js'
+import { useFavorites } from '../context/FavoritesContext.jsx'
 import { useLayout } from './useLayout.js'
 
 /**
@@ -11,6 +11,7 @@ export function useToggleFavorite() {
   const { setFavorite } = useFavorites()
   const { showToast } = useLayout()
 
+  // стабильная функция: уходит в memo-карточки каталога — без useCallback memo потерял бы смысл
   return useCallback(
     (movie, isFavorite) => {
       setFavorite(movie.id, isFavorite)

@@ -1,0 +1,20 @@
+.schema-form {
+  display: grid;
+  gap: 18px;
+}
+
+.schema-form__server-error {
+  margin: 0;
+  padding: 12px 14px;
+  border: 1px solid var(--color-danger);
+  border-radius: var(--radius-md);
+  color: var(--color-danger);
+  font-weight: 700;
+}
+
+.schema-form__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: 4px;
+}

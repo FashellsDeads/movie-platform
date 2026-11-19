@@ -7,17 +7,25 @@ export const STORAGE_KEYS = {
   session: 'cinevibe:session',
   tickets: 'cinevibe:tickets',
   orders: 'cinevibe:orders',
+  accounts: 'cinevibe:accounts',
+  reviews: 'cinevibe:reviews',
 }
+
+// store — какое хранилище: localStorage (по умолчанию, переживает закрытие браузера)
+// или sessionStorage (живёт, пока открыта вкладка — вход без «Запомнить меня»)
+// (сам доступ к localStorage может бросить ошибку при запрете cookies — поэтому он внутри try)
+const resolveStore = (store) => (store === 'session' ? globalThis.sessionStorage : globalThis.localStorage)
 
 /**
  * @template T
  * @param {string} key
  * @param {T} fallback — значение, если ключа нет или данные повреждены
+ * @param {'local' | 'session'} [store='local']
  * @returns {T}
  */
-export function readFromStorage(key, fallback) {
+export function readFromStorage(key, fallback, store) {
   try {
-    const raw = localStorage.getItem(key)
+    const raw = resolveStore(store).getItem(key)
     return raw === null ? fallback : JSON.parse(raw)
   } catch {
     return fallback
@@ -27,22 +35,24 @@ export function readFromStorage(key, fallback) {
 /**
  * @param {string} key
  * @param {unknown} value
+ * @param {'local' | 'session'} [store='local']
  */
-export function writeToStorage(key, value) {
+export function writeToStorage(key, value, store) {
   try {
-    localStorage.setItem(key, JSON.stringify(value))
+    resolveStore(store).setItem(key, JSON.stringify(value))
   } catch {
-    // хранилище недоступно — просто не сохраняем
+    // Хранилище недоступно — просто не сохраняем
   }
 }
 
 /**
  * @param {string} key
+ * @param {'local' | 'session'} [store='local']
  */
-export function removeFromStorage(key) {
+export function removeFromStorage(key, store) {
   try {
-    localStorage.removeItem(key)
+    resolveStore(store).removeItem(key)
   } catch {
-    // хранилище недоступно — удалять нечего
+    // Хранилище недоступно — удалять нечего
   }
 }

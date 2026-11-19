@@ -1,81 +1,39 @@
-import { createAvatar } from '../utils/placeholders.js'
-
 export const SITE_NAME = 'CineVibe'
 
-// С ДЗ №6 ссылки ведут на маршруты React Router, а не на якоря секций
+// Ссылки ведут на маршруты React Router
 export const navItems = [
   { id: 'home', label: 'Главная', link: '/' },
-  { id: 'movies', label: 'Фильмы', link: '/movies' },
+  { id: 'products', label: 'Каталог', link: '/products' },
   { id: 'favorites', label: 'Избранное', link: '/favorites' },
-  { id: 'bar', label: 'Кинобар', link: '/bar' },
-  { id: 'users', label: 'Пользователи', link: '/users' },
   { id: 'about', label: 'О кинотеатре', link: '/about' },
 ]
 
 export const footerLinks = [
-  { id: 'movies', label: 'Каталог фильмов', link: '/movies' },
-  { id: 'tickets', label: 'Мои билеты', link: '/tickets' },
+  { id: 'products', label: 'Каталог', link: '/products' },
+  { id: 'cart', label: 'Корзина', link: '/cart' },
   { id: 'profile', label: 'Личный кабинет', link: '/profile' },
-  { id: 'tasks', label: 'Задачи', link: '/tasks' },
   { id: 'about', label: 'О кинотеатре', link: '/about' },
 ]
 
-// Учебные страницы с компонентами — отдельная колонка в подвале, не в главном меню
-export const devLinks = [
-  { id: 'patterns', label: 'UI-паттерны', link: '/patterns' },
-  { id: 'form-builder', label: 'Конструктор форм', link: '/form-builder' },
-]
-
 export const cinemaInfo = {
-  address: 'Алматы, пр. Абая, 52 — зал CineVibe Hall',
+  address: 'Алматы, пр. Абая, 52 — ТРЦ «Керемет», 3 этаж',
   phone: '+7 (727) 355-00-55',
   email: 'hello@cinevibe.kz',
-  hours: 'Онлайн — круглосуточно, зал — с 10:00 до 02:00',
+  hours: 'Ежедневно с 10:00 до 02:00',
 }
 
-// ДЗ №8 — варианты для формы регистрации (select и radio)
-export const countries = ['Казахстан', 'Кыргызстан', 'Узбекистан', 'Россия', 'Беларусь', 'Другая страна']
-
+// Варианты для radio «Пол» в форме регистрации
 export const genders = [
   { value: 'male', label: 'Мужской' },
   { value: 'female', label: 'Женский' },
   { value: 'unspecified', label: 'Не указывать' },
 ]
 
-export const currentUser = {
-  name: 'Жумагали Адильжан',
-  avatarUrl: createAvatar('ЖА', '#e11d48'),
-  role: 'Premium-подписчик',
-  email: '39088@iitu.edu.kz',
-}
-
 export const hero = {
-  heading: 'Кино, которое хочется пересматривать',
-  subheading:
-    'Тысячи фильмов в 4K без рекламы. Новинки каждую неделю — смотрите дома, в дороге и на любом устройстве.',
-  buttonText: 'Смотреть «Дюну» сейчас',
+  eyebrow: 'Кинотеатр в Алматы · Dolby Atmos · VIP-зал',
+  heading: 'Кино на большом экране — билеты и попкорн в одной корзине',
+  subheading: 'Выберите сеанс, добавьте комбо из кинобара и приходите к началу фильма: всё уже будет готово.',
 }
-
-export const promo = {
-  title: 'Premium за полцены',
-  text: 'Первый месяц подписки — 1 245 ₸ вместо 2 490 ₸. Успейте, пока идёт таймер.',
-  buttonText: 'Забрать скидку',
-  durationSeconds: 10 * 60,
-}
-
-export const stats = [
-  { id: 'titles', title: 'Фильмов в каталоге', value: 12480, change: 8.2, isPositive: true },
-  { id: 'online', title: 'Зрителей онлайн', value: 3215, change: 12.5, isPositive: true },
-  { id: 'premieres', title: 'Премьер за месяц', value: 146, change: 3.1, isPositive: false },
-  { id: 'rating', title: 'Средняя оценка', value: 4.6, change: 0.4, isPositive: true },
-]
-
-export const premiumBenefits = [
-  'Весь каталог в качестве 4K HDR',
-  'Без рекламы и ограничений',
-  'Просмотр на 5 устройствах одновременно',
-  'Скачивание фильмов для офлайн-просмотра',
-]
 
 // icon — данные для атрибута d у <path> (иконки нарисованы линиями 24×24)
 export const socialLinks = [

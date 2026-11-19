@@ -1,18 +1,9 @@
 import { useCallback, useEffect, useState } from 'react'
+import { getJson } from '../services/api.js'
 
 /**
- * Понятное пользователю сообщение для ответа сервера с ошибкой.
- * @param {number} status — HTTP-статус
- */
-function getStatusMessage(status) {
-  if (status === 404) return 'Такие данные не найдены (ошибка 404).'
-  if (status >= 500) return `Сервер временно не работает (ошибка ${status}). Попробуйте ещё раз чуть позже.`
-  return `Сервер отклонил запрос (ошибка ${status}).`
-}
-
-/**
- * ДЗ №10 — GET-запрос к API: вся логика загрузки, ошибок и повтора живёт здесь,
- * а компонент только показывает результат. Работает с любым адресом.
+ * GET-запрос к API: загрузка, ошибка и повтор живут здесь, а компонент только показывает результат.
+ * Сам запрос и понятные тексты ошибок — в services/api.js (getJson).
  * @template T
  * @param {string} url — адрес запроса; при его смене запрос выполняется заново
  * @returns {{ data: T | null, loading: boolean, error: string | null, refetch: () => void }}
@@ -33,18 +24,12 @@ export function useFetch(url) {
       setLoading(true)
 
       try {
-        const response = await fetch(url, { signal: controller.signal })
-        // fetch не считает ответы 404 и 500 ошибкой — проверяем статус сами
-        if (!response.ok) throw new Error(getStatusMessage(response.status))
-        setData(await response.json())
+        setData(await getJson(url, controller.signal))
         setLoading(false)
       } catch (err) {
         // Запрос отменён: компонент закрыт или уже идёт новый запрос — показывать нечего
         if (err.name === 'AbortError') return
-        // TypeError — сервер недоступен, SyntaxError — в ответе не JSON
-        if (err instanceof TypeError) setError('Не удалось связаться с сервером. Проверьте интернет и попробуйте снова.')
-        else if (err instanceof SyntaxError) setError('Сервер прислал данные, которые не удалось прочитать.')
-        else setError(err.message)
+        setError(err.message)
         setLoading(false)
       }
     }
@@ -53,6 +38,7 @@ export function useFetch(url) {
     return () => controller.abort()
   }, [url, attempt])
 
+  // стабильная функция: её передают в кнопки «Повторить» и в зависимости эффектов
   const refetch = useCallback(() => setAttempt((prev) => prev + 1), [])
 
   return { data, loading, error, refetch }

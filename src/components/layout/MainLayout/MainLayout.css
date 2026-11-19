@@ -1,0 +1,13 @@
+/* Каркас сайта на Layout: без промежутков между слотами, подвал прижат к низу экрана */
+.app-layout {
+  flex: 1;
+  gap: 0;
+  grid-template-rows: auto 1fr auto;
+}
+
+/* Шапка закреплена на самой области Layout — sticky работает только относительно родителя */
+.app-layout > .layout__header {
+  position: sticky;
+  top: 0;
+  z-index: 50;
+}

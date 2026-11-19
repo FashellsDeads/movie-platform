@@ -7,6 +7,6 @@ export default defineConfig({
   // ДЗ №11 — тесты: jsdom заменяет браузер, setup подключает матчеры и очистку
   test: {
     environment: 'jsdom',
-    setupFiles: './src/test/setup.js',
+    setupFiles: './src/tests/setup.js',
   },
 })
