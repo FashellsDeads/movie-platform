@@ -1,6 +1,6 @@
 import { useFavorites } from '../../context/favorites/useFavorites.js'
 import { useToggleFavorite } from '../../hooks/useToggleFavorite.js'
-import Card from '../Card/Card.jsx'
+import MovieCard from '../MovieCard/MovieCard.jsx'
 
 /**
  * @typedef {Object} MovieGridProps
@@ -19,7 +19,7 @@ function MovieGrid({ movies, isLoading = false }) {
   return (
     <div className={`movies-grid${isLoading ? ' movies-grid--loading' : ''}`}>
       {movies.map((movie) => (
-        <Card
+        <MovieCard
           key={movie.id}
           id={movie.id}
           title={movie.title}

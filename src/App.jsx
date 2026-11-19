@@ -12,6 +12,7 @@ import HomePage from './pages/HomePage.jsx'
 import LoginPage from './pages/LoginPage.jsx'
 import MovieDetailsPage from './pages/MovieDetailsPage.jsx'
 import NotFoundPage from './pages/NotFoundPage.jsx'
+import PatternsPage from './pages/PatternsPage.jsx'
 import RegisterPage from './pages/RegisterPage.jsx'
 import TasksPage from './pages/TasksPage.jsx'
 import TicketsPage from './pages/TicketsPage.jsx'
@@ -47,6 +48,7 @@ function App() {
                 <Route path="users" element={<UsersPage />} />
                 <Route path="users/:id" element={<UserDetailsPage />} />
                 <Route path="about" element={<AboutPage />} />
+                <Route path="patterns" element={<PatternsPage />} />
                 <Route path="login" element={<LoginPage />} />
                 <Route path="register" element={<RegisterPage />} />
 

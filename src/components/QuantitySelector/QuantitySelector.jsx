@@ -52,7 +52,11 @@ function QuantitySelector({ unitPrice, max = 10, label = 'Билеты на по
         </button>
       </div>
       <span className="quantity__total">{formatNumber(quantity * unitPrice)} ₸</span>
-      {onConfirm && <Button text={confirmText} variant="secondary" onClick={() => onConfirm(quantity)} />}
+      {onConfirm && (
+        <Button variant="secondary" onClick={() => onConfirm(quantity)}>
+          {confirmText}
+        </Button>
+      )}
     </div>
   )
 }

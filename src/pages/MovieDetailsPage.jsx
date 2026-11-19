@@ -127,7 +127,7 @@ function MovieDetailsPage() {
     <section className="page">
       <Container>
         <div className="page__back">
-          <Button text="← Назад" variant="outline" onClick={goBack} />
+          <Button variant="outline" onClick={goBack}>← Назад</Button>
         </div>
 
         <article className="movie-details">

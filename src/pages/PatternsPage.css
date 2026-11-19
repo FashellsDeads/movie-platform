@@ -1,0 +1,123 @@
+.patterns__title {
+  margin: 0 0 8px;
+  font-size: clamp(1.75rem, 4vw, 2.5rem);
+  font-weight: 800;
+  color: var(--color-text);
+}
+
+.patterns__subtitle,
+.patterns__muted {
+  margin: 0;
+  color: var(--color-muted);
+}
+
+.patterns__toc ul {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.patterns__toc a {
+  display: block;
+  padding: 6px 12px;
+  border-radius: var(--radius-md);
+  color: var(--color-text);
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.patterns__toc a:hover {
+  background: var(--color-surface-hover);
+  color: var(--color-accent);
+}
+
+@media (min-width: 900px) {
+  .patterns__toc ul {
+    flex-direction: column;
+  }
+}
+
+.patterns__section {
+  display: grid;
+  gap: 16px;
+  margin-bottom: 40px;
+  scroll-margin-top: 96px;
+}
+
+.patterns__section h2 {
+  margin: 0;
+  font-size: 1.375rem;
+  color: var(--color-text);
+}
+
+.patterns__cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(220px, 100%), 1fr));
+  gap: 16px;
+  align-items: start;
+}
+
+.patterns__cards p {
+  margin: 0 0 12px;
+  color: var(--color-muted);
+}
+
+.patterns__row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 12px;
+}
+
+.patterns__list-title {
+  margin: 0 0 8px;
+  font-size: 1rem;
+  color: var(--color-text);
+}
+
+.patterns__list {
+  margin: 0 0 16px;
+  padding-left: 20px;
+  color: var(--color-text);
+  line-height: 1.7;
+}
+
+.patterns__modal-title {
+  margin: 0 0 8px;
+  font-size: 1.25rem;
+  color: var(--color-text);
+}
+
+.patterns__checkbox {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--color-text);
+  cursor: pointer;
+}
+
+.patterns__mini-layout {
+  padding: 16px;
+  border: 1px dashed var(--color-border-strong);
+  border-radius: var(--radius-lg);
+}
+
+.patterns__mini-layout .layout__sidebar {
+  position: static;
+}
+
+.patterns__slot {
+  padding: 12px;
+  border-radius: var(--radius-md);
+  background: var(--color-surface-raised);
+  color: var(--color-muted);
+  font-family: ui-monospace, monospace;
+  text-align: center;
+}
+
+.patterns__slot--main {
+  min-height: 80px;
+}

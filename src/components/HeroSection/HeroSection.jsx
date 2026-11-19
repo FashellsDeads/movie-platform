@@ -22,7 +22,7 @@ function HeroSection({ heading, subheading, buttonText, onButtonClick }) {
           <span className="hero__eyebrow">Онлайн-кинотеатр · 4K · без рекламы</span>
           <h1 className="hero__heading">{heading}</h1>
           <p className="hero__subheading">{subheading}</p>
-          <Button text={buttonText} variant="primary" onClick={onButtonClick} />
+          <Button variant="primary" onClick={onButtonClick}>{buttonText}</Button>
         </div>
       </Container>
     </section>

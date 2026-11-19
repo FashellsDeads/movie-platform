@@ -164,7 +164,9 @@ function CatalogPage() {
             <p className="empty-state__text">
               {query ? `По запросу «${query}»` : 'По этим условиям'} в жанре «{genre}» фильмов нет.
             </p>
-            <Button text="Сбросить фильтры" variant="secondary" onClick={() => setSearchParams({})} />
+            <Button variant="secondary" onClick={() => setSearchParams({})}>
+              Сбросить фильтры
+            </Button>
           </div>
         )}
 

@@ -18,13 +18,14 @@ import './Footer.css'
  * @property {string} copyrightText — год и авторские права
  * @property {SocialLink[]} socialLinks — ссылки на соцсети
  * @property {import('../Navigation/Navigation.jsx').NavItem[]} links — внутренние разделы сайта
+ * @property {import('../Navigation/Navigation.jsx').NavItem[]} [devLinks] — страницы для разработчиков
  */
 
 /**
  * Подвал сайта. Логотип и оформление зависят от темы из ThemeContext.
  * @param {FooterProps} props
  */
-function Footer({ copyrightText, socialLinks, links }) {
+function Footer({ copyrightText, socialLinks, links, devLinks = [] }) {
   const { theme, isDarkMode } = useTheme()
   const logoSrc = isDarkMode ? logoDark : logoLight
 
@@ -49,6 +50,21 @@ function Footer({ copyrightText, socialLinks, links }) {
               ))}
             </ul>
           </nav>
+
+          {devLinks.length > 0 && (
+            <nav aria-label="Для разработчиков">
+              <p className="footer__heading">Для разработчиков</p>
+              <ul className="footer__links">
+                {devLinks.map((item) => (
+                  <li key={item.id}>
+                    <Link className="footer__link" to={item.link}>
+                      {item.label}
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </nav>
+          )}
 
           <ul className="footer__socials">
             {socialLinks.map(({ platform, url, icon }) => (

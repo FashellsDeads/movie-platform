@@ -101,12 +101,10 @@ function TicketsPage() {
                 {totalCount} {pluralize(totalCount, TICKET_FORMS)} · <strong>{formatNumber(totalPrice)} ₸</strong>
               </p>
               <div className="tickets__actions">
-                <Button text="Очистить" variant="outline" onClick={clearCart} />
-                <Button
-                  text={isAuthenticated ? 'Оформить' : 'Войти и оформить'}
-                  variant="primary"
-                  onClick={handleCheckout}
-                />
+                <Button variant="outline" onClick={clearCart}>Очистить</Button>
+                <Button variant="primary" onClick={handleCheckout}>
+                  {isAuthenticated ? 'Оформить' : 'Войти и оформить'}
+                </Button>
               </div>
             </div>
           </div>

@@ -1,0 +1,50 @@
+.layout {
+  display: grid;
+  gap: 24px;
+  grid-template-areas:
+    'header'
+    'main'
+    'footer';
+}
+
+.layout--with-sidebar {
+  grid-template-areas:
+    'header'
+    'sidebar'
+    'main'
+    'footer';
+}
+
+.layout__header {
+  grid-area: header;
+}
+
+.layout__sidebar {
+  grid-area: sidebar;
+}
+
+.layout__main {
+  grid-area: main;
+  min-width: 0;
+}
+
+.layout__footer {
+  grid-area: footer;
+}
+
+/* На широком экране боковая колонка встаёт слева от содержимого */
+@media (min-width: 900px) {
+  .layout--with-sidebar {
+    grid-template-columns: 260px minmax(0, 1fr);
+    grid-template-areas:
+      'header header'
+      'sidebar main'
+      'footer footer';
+  }
+
+  .layout__sidebar {
+    align-self: start;
+    position: sticky;
+    top: 96px;
+  }
+}

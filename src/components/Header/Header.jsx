@@ -84,7 +84,7 @@ function Header({ navItems, favoritesCount, onPremiumClick }) {
   } else if (isAuthenticated) {
     account = <UserProfile user={user} onManageSubscription={onPremiumClick} onLogout={handleLogout} />
   } else {
-    account = <Button text="Войти" variant="outline" onClick={goToLogin} />
+    account = <Button variant="outline" onClick={goToLogin}>Войти</Button>
   }
 
   return (
@@ -105,7 +105,7 @@ function Header({ navItems, favoritesCount, onPremiumClick }) {
               {totalCount > 0 && <span className="header__tickets-sum">· {formatNumber(totalPrice)} ₸</span>}
             </Link>
             {!isMobile && <ThemeToggle isDarkMode={isDarkMode} onToggle={toggleTheme} />}
-            {!isMobile && <Button text="Premium" variant="secondary" onClick={onPremiumClick} />}
+            {!isMobile && <Button variant="secondary" onClick={onPremiumClick}>Premium</Button>}
             {account}
             {isMobile && (
               <button
@@ -132,7 +132,7 @@ function Header({ navItems, favoritesCount, onPremiumClick }) {
               {favorites}
               <ThemeToggle isDarkMode={isDarkMode} onToggle={toggleTheme} />
             </div>
-            <Button text="Оформить Premium" variant="primary" onClick={handlePremiumClick} />
+            <Button variant="primary" onClick={handlePremiumClick}>Оформить Premium</Button>
           </Container>
         </div>
       )}

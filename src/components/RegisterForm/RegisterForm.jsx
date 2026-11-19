@@ -275,8 +275,8 @@ function RegisterForm({ onRegister }) {
         </FormField>
 
         <div className="register-form__actions">
-          <Button text="Зарегистрироваться" type="submit" />
-          {!isSubmitted && <Button text="Сбросить" variant="outline" onClick={handleReset} />}
+          <Button type="submit">Зарегистрироваться</Button>
+          {!isSubmitted && <Button variant="outline" onClick={handleReset}>Сбросить</Button>}
         </div>
       </form>
 
@@ -331,7 +331,7 @@ function RegisterForm({ onRegister }) {
             </dl>
           </section>
 
-          <Button text="Очистить форму" variant="outline" onClick={handleReset} />
+          <Button variant="outline" onClick={handleReset}>Очистить форму</Button>
         </div>
       )}
     </div>

@@ -52,13 +52,10 @@ function UsersPage() {
               hasClearButton={false}
             />
             <SortDropdown options={companyOptions} value={company} onChange={setCompany} label="Компания" />
-            <Button
-              text="Очистить поиск"
-              variant="secondary"
-              isDisabled={!search && company === ALL_COMPANIES}
-              onClick={clearSearch}
-            />
-            <Button text="Повторить запрос" variant="secondary" isDisabled={loading} onClick={refetch} />
+            <Button variant="secondary" disabled={!search && company === ALL_COMPANIES} onClick={clearSearch}>
+              Очистить поиск
+            </Button>
+            <Button variant="secondary" disabled={loading} onClick={refetch}>Повторить запрос</Button>
           </div>
         )}
 

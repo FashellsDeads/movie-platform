@@ -17,7 +17,7 @@ function ErrorState({ title = 'Не удалось загрузить данны
     <div className="empty-state empty-state--error" role="alert">
       <p className="empty-state__title">{title}</p>
       <p className="empty-state__text">{message}</p>
-      <Button text={retryText} variant="primary" onClick={onRetry} />
+      <Button variant="primary" onClick={onRetry}>{retryText}</Button>
     </div>
   )
 }

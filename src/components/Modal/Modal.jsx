@@ -4,7 +4,7 @@ import './Modal.css'
 /**
  * @typedef {Object} ModalProps
  * @property {boolean} isOpen — показано ли окно
- * @property {string} title — заголовок окна
+ * @property {string} [title] — заголовок окна; без него содержимое целиком задаётся children
  * @property {() => void} onClose — закрыть окно
  * @property {import('react').ReactNode} [children] — содержимое окна
  */
@@ -36,13 +36,18 @@ function Modal({ isOpen, title, onClose, children }) {
         className="modal__dialog"
         role="dialog"
         aria-modal="true"
-        aria-labelledby={titleId}
+        // без заголовка окно всё равно должно иметь имя для экранного диктора
+        aria-labelledby={title ? titleId : undefined}
+        aria-label={title ? undefined : 'Диалог'}
         onClick={(event) => event.stopPropagation()}
       >
-        <header className="modal__header">
-          <h2 id={titleId} className="modal__title">
-            {title}
-          </h2>
+        {/* ДЗ №12 — title необязателен: тогда всё содержимое задаётся снаружи через children */}
+        <header className={`modal__header${title ? '' : ' modal__header--bare'}`}>
+          {title && (
+            <h2 id={titleId} className="modal__title">
+              {title}
+            </h2>
+          )}
           <button type="button" className="modal__close" aria-label="Закрыть" onClick={onClose}>
             ×
           </button>

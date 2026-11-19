@@ -20,6 +20,9 @@ export const footerLinks = [
   { id: 'about', label: 'О кинотеатре', link: '/about' },
 ]
 
+// Учебные страницы с компонентами — отдельная колонка в подвале, не в главном меню
+export const devLinks = [{ id: 'patterns', label: 'UI-паттерны', link: '/patterns' }]
+
 export const cinemaInfo = {
   address: 'Алматы, пр. Абая, 52 — зал CineVibe Hall',
   phone: '+7 (727) 355-00-55',

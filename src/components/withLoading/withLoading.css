@@ -1,0 +1,7 @@
+.with-loading {
+  margin: 0;
+  padding: 32px 16px;
+  color: var(--color-muted);
+  font-weight: 700;
+  text-align: center;
+}

@@ -24,7 +24,9 @@ function UserDetailsPage() {
     <section className="page">
       <Container>
         <div className="page__back">
-          <Button text="← Назад" variant="secondary" onClick={() => navigate('/users')} />
+          <Button variant="secondary" onClick={() => navigate('/users')}>
+            ← Назад
+          </Button>
         </div>
 
         {loading && (

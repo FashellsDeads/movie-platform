@@ -75,3 +75,10 @@
     transform: translateY(16px) scale(0.98);
   }
 }
+
+/* Окно без заголовка: остаётся только кнопка закрытия справа, без разделительной линии */
+.modal__header--bare {
+  justify-content: flex-end;
+  padding-bottom: 0;
+  border-bottom: 0;
+}

@@ -1,0 +1,31 @@
+.toggle__button {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: var(--color-accent);
+  font: inherit;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.toggle__button::after {
+  content: '▾';
+  transition: transform 0.2s ease;
+}
+
+.toggle__button[aria-expanded='true']::after {
+  transform: rotate(180deg);
+}
+
+.toggle__button:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 3px;
+}
+
+.toggle__content {
+  margin-top: 12px;
+  color: var(--color-text);
+}

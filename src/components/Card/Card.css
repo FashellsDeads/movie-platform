@@ -1,130 +1,32 @@
-.card {
-  position: relative;
-  display: flex;
-  flex-direction: column;
-  overflow: hidden;
+.ui-card {
   border: 1px solid var(--color-border);
   border-radius: var(--radius-lg);
   background: var(--color-surface);
-  transition:
-    transform 0.25s ease,
-    border-color 0.25s ease,
-    box-shadow 0.25s ease;
-}
-
-/* Ссылка в названии растянута на всю карточку: клик в любом месте открывает фильм */
-.card__link::after {
-  content: '';
-  position: absolute;
-  inset: 0;
-  z-index: 1;
-  border-radius: inherit;
-}
-
-.card__link:focus-visible {
-  outline: none;
-}
-
-.card:has(.card__link:focus-visible) {
-  outline: 2px solid var(--color-accent);
-  outline-offset: 3px;
-}
-
-/* Кнопки лежат поверх растянутой ссылки, чтобы нажимались сами */
-.card__favorite,
-.card__actions {
-  z-index: 2;
-}
-
-.card:hover {
-  transform: translateY(-4px);
-  border-color: var(--color-border-strong);
-  box-shadow: var(--shadow-lg);
-}
-
-.card__poster {
-  position: relative;
-  aspect-ratio: 2 / 3;
-  overflow: hidden;
-  background: var(--color-surface-raised);
-}
-
-.card__poster img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  transition: transform 0.4s ease;
-}
-
-.card:hover .card__poster img {
-  transform: scale(1.04);
-}
-
-.card__badge {
-  position: absolute;
-  top: 12px;
-  left: 12px;
-}
-
-.card__favorite {
-  position: absolute;
-  top: 10px;
-  right: 10px;
-}
-
-.card__body {
-  display: flex;
-  flex: 1;
-  flex-direction: column;
-  gap: 10px;
-  padding: 18px;
-}
-
-.card__meta {
-  margin: 0;
-  font-size: 0.8125rem;
-  color: var(--color-muted);
-}
-
-.card__title {
-  margin: 0;
-  font-size: 1.125rem;
-  font-weight: 800;
-  line-height: 1.25;
   color: var(--color-text);
 }
 
-.card__description {
-  display: -webkit-box;
-  margin: 0;
-  overflow: hidden;
-  font-size: 0.875rem;
-  color: var(--color-muted);
-  -webkit-box-orient: vertical;
-  -webkit-line-clamp: 3;
-  line-clamp: 3;
+.ui-card--small {
+  padding: 14px 16px;
 }
 
-.card__actions {
-  position: relative;
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
-  margin-top: auto;
-  padding-top: 6px;
+.ui-card--medium {
+  padding: 20px 24px;
 }
 
-.card__actions .button {
-  flex: 1 1 auto;
-  padding-inline: 12px;
+.ui-card--large {
+  padding: 28px 32px;
 }
 
-/* Оформление под тему (класс ставит Card через useTheme):
-   в светлой теме фон карточки почти совпадает с фоном страницы, нужна тень */
-.card--light {
-  box-shadow: 0 1px 3px rgba(20, 20, 40, 0.08);
+.ui-card__title {
+  margin: 0 0 12px;
+  font-size: 1.125rem;
+  font-weight: 800;
 }
 
-.card--light:hover {
-  box-shadow: 0 16px 40px rgba(20, 20, 40, 0.14);
+.ui-card--large .ui-card__title {
+  font-size: 1.375rem;
+}
+
+.ui-card--small .ui-card__title {
+  font-size: 1rem;
 }

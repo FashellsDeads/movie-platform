@@ -47,6 +47,18 @@
   background: var(--color-surface-hover);
 }
 
+/* ДЗ №12 — опасное действие: удаление, выход */
+.button--danger {
+  color: #fff;
+  /* фиксированный красный: белый текст на нём читается в обеих темах */
+  background: #dc2626;
+  box-shadow: 0 8px 24px rgb(220 38 38 / 0.25);
+}
+
+.button--danger:not(:disabled):hover {
+  background: #b91c1c;
+}
+
 .button--outline {
   color: var(--color-text);
   background: transparent;

@@ -48,7 +48,7 @@ function PromoBanner({ title, text, buttonText, durationSeconds, onAction, onClo
         <span className="promo__timer-label">{isExpired ? 'Время вышло' : 'Скидка сгорит через'}</span>
         <span className="promo__timer-value">{formatTime(secondsLeft)}</span>
       </div>
-      <Button text={buttonText} variant="primary" isDisabled={isExpired} onClick={onAction} />
+      <Button variant="primary" disabled={isExpired} onClick={onAction}>{buttonText}</Button>
       <button type="button" className="promo__close" aria-label="Скрыть предложение" onClick={onClose}>
         ×
       </button>

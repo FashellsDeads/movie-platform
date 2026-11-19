@@ -28,7 +28,9 @@ function ProductItem({ product, quantity, onAddToCart }) {
         <span className="product__price">{formatNumber(product.price)} ₸</span>
       </p>
       <div className="product__actions">
-        <Button text="Добавить в корзину" variant="secondary" onClick={() => onAddToCart(product)} />
+        <Button variant="secondary" onClick={() => onAddToCart(product)}>
+          Добавить в корзину
+        </Button>
         {quantity > 0 && <span className="product__quantity">В заказе: {quantity}</span>}
       </div>
     </article>

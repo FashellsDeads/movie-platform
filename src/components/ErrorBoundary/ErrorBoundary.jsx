@@ -42,7 +42,9 @@ class ErrorBoundary extends Component {
               Страница не смогла отобразиться. Попробуйте обновить её — или вернитесь на главную.
             </p>
             <div className="empty-state__actions">
-              <Button text="Обновить страницу" variant="primary" onClick={() => window.location.reload()} />
+              <Button variant="primary" onClick={() => window.location.reload()}>
+                Обновить страницу
+              </Button>
               <Link className="link-button link-button--outline" to="/">
                 На главную
               </Link>

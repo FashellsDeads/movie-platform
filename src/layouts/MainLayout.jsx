@@ -9,7 +9,7 @@ import ScrollProgress from '../components/ScrollProgress/ScrollProgress.jsx'
 import Toast from '../components/Toast/Toast.jsx'
 import { useFavorites } from '../context/favorites/useFavorites.js'
 import { useTheme } from '../context/theme/useTheme.js'
-import { SITE_NAME, footerLinks, navItems, premiumBenefits, socialLinks } from '../data/site.js'
+import { SITE_NAME, devLinks, footerLinks, navItems, premiumBenefits, socialLinks } from '../data/site.js'
 
 const copyrightText = `© ${new Date().getFullYear()} ${SITE_NAME}. Все права защищены.`
 
@@ -58,7 +58,7 @@ function MainLayout() {
         </ErrorBoundary>
       </main>
 
-      <Footer copyrightText={copyrightText} socialLinks={socialLinks} links={footerLinks} />
+      <Footer copyrightText={copyrightText} socialLinks={socialLinks} links={footerLinks} devLinks={devLinks} />
 
       <Modal isOpen={isPremiumOpen} title={`${SITE_NAME} Premium`} onClose={closePremium}>
         <div className="premium">
@@ -71,8 +71,8 @@ function MainLayout() {
             ))}
           </ul>
           <div className="premium__actions">
-            <Button text="Оформить подписку" variant="primary" onClick={closePremium} />
-            <Button text="Позже" variant="outline" onClick={closePremium} />
+            <Button variant="primary" onClick={closePremium}>Оформить подписку</Button>
+            <Button variant="outline" onClick={closePremium}>Позже</Button>
           </div>
         </div>
       </Modal>

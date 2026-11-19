@@ -41,7 +41,7 @@ function TaskForm({ onAdd }) {
           aria-invalid={Boolean(error)}
           onChange={handleChange}
         />
-        <Button text="Добавить" type="submit" />
+        <Button type="submit">Добавить</Button>
       </div>
       {error && (
         <p className="task-form__error" role="alert">

@@ -27,7 +27,7 @@ function ProfileSettings() {
           <p className="settings__title">Выход из аккаунта</p>
           <p className="settings__text">Билеты в корзине и избранное останутся в этом браузере.</p>
         </div>
-        <Button text="Выйти" variant="outline" onClick={handleLogout} />
+        <Button variant="outline" onClick={handleLogout}>Выйти</Button>
       </div>
     </div>
   )

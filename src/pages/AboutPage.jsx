@@ -54,7 +54,7 @@ function AboutPage() {
                 <li key={benefit}>{benefit}</li>
               ))}
             </ul>
-            <Button text="Подробнее о подписке" variant="primary" onClick={openPremium} />
+            <Button variant="primary" onClick={openPremium}>Подробнее о подписке</Button>
           </article>
         </div>
 
